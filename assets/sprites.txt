@@ -1,0 +1,187 @@
+sprites.png
+size: 768, 2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+BG_black
+  rotate: false
+  xy: 0, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+BG_gray
+  rotate: false
+  xy: 64, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Blue
+  rotate: false
+  xy: 128, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Board
+  rotate: false
+  xy: 0, 640
+  size: 768, 1408
+  orig: 768, 1408
+  offset: 0, 0
+  index: -1
+Border
+  rotate: false
+  xy: 192, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+ghost_shape_I
+  rotate: false
+  xy: 256, 0
+  size: 64, 256
+  orig: 64, 256
+  offset: 0, 0
+  index: -1
+ghost_shape_J
+  rotate: false
+  xy: 320, 256
+  size: 192, 128
+  orig: 192, 128
+  offset: 0, 0
+  index: -1
+ghost_shape_L
+  rotate: false
+  xy: 512, 256
+  size: 192, 128
+  orig: 192, 128
+  offset: 0, 0
+  index: -1
+ghost_shape_O
+  rotate: false
+  xy: 64, 256
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+ghost_shape_S
+  rotate: false
+  xy: 0, 384
+  size: 192, 128
+  orig: 192, 128
+  offset: 0, 0
+  index: -1
+ghost_shape_Single
+  rotate: false
+  xy: 320, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+ghost_shape_T
+  rotate: false
+  xy: 192, 384
+  size: 192, 128
+  orig: 192, 128
+  offset: 0, 0
+  index: -1
+ghost_shape_Z
+  rotate: false
+  xy: 384, 384
+  size: 192, 128
+  orig: 192, 128
+  offset: 0, 0
+  index: -1
+Green
+  rotate: false
+  xy: 384, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+LightBlue
+  rotate: false
+  xy: 448, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Orange
+  rotate: false
+  xy: 512, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Purple
+  rotate: false
+  xy: 576, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+Red
+  rotate: false
+  xy: 640, 0
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+shape_I
+  rotate: false
+  xy: 704, 0
+  size: 64, 256
+  orig: 64, 256
+  offset: 0, 0
+  index: -1
+shape_J
+  rotate: false
+  xy: 576, 384
+  size: 192, 128
+  orig: 192, 128
+  offset: 0, 0
+  index: -1
+shape_L
+  rotate: false
+  xy: 0, 512
+  size: 192, 128
+  orig: 192, 128
+  offset: 0, 0
+  index: -1
+shape_O
+  rotate: false
+  xy: 192, 256
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+shape_S
+  rotate: false
+  xy: 192, 512
+  size: 192, 128
+  orig: 192, 128
+  offset: 0, 0
+  index: -1
+shape_T
+  rotate: false
+  xy: 384, 512
+  size: 192, 128
+  orig: 192, 128
+  offset: 0, 0
+  index: -1
+shape_Z
+  rotate: false
+  xy: 576, 512
+  size: 192, 128
+  orig: 192, 128
+  offset: 0, 0
+  index: -1
+Yellow
+  rotate: false
+  xy: 0, 256
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
