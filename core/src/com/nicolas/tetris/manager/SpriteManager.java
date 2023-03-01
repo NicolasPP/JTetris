@@ -12,73 +12,58 @@ public class SpriteManager {
     final BoardSprite board;
 
     public SpriteManager() {
-        float SPRITE_SCALE = 0.25f;
+       final float SPRITE_SCALE = 0.25f;
 
-        board = new BoardSprite(
-                ResourceManager.get("Board"),
-                new Pair<>(0, 0),
-                SPRITE_SCALE,
-                ResourceManager.get("BG_gray"),
-                ResourceManager.get("BG_black"),
-                ResourceManager.get("Border")
-        );
+        board = new BoardSprite(new Pair<>(0, 0), SPRITE_SCALE);
 
         tetrominos.add(new TetrominoSprite(
-                ResourceManager.get("shape_I"),
+                "shape_I",
+                "LightBlue",
+                "ghost_shape_I",
                 Pair.createPair(0, 0),
-                SPRITE_SCALE,
-                ResourceManager.get("LightBlue"),
-                ResourceManager.get("ghost_shape_I")
-        ));
+                SPRITE_SCALE));
 
         tetrominos.add(new TetrominoSprite(
-                ResourceManager.get("shape_J"),
-                Pair.createPair(0, 20),
-                SPRITE_SCALE,
-                ResourceManager.get("Blue"),
-                ResourceManager.get("ghost_shape_J")
-        ));
-
-        tetrominos.add(new TetrominoSprite(
-                ResourceManager.get("shape_L"),
-                Pair.createPair(0, 30),
-                SPRITE_SCALE,
-                ResourceManager.get("Orange"),
-                ResourceManager.get("ghost_shape_L")
-        ));
-
-        tetrominos.add(new TetrominoSprite(
-                ResourceManager.get("shape_O"),
-                Pair.createPair(0, 40),
-                SPRITE_SCALE,
-                ResourceManager.get("Yellow"),
-                ResourceManager.get("ghost_shape_O")
-        ));
-
-        tetrominos.add(new TetrominoSprite(
-                ResourceManager.get("shape_S"),
+                "shape_J",
+                "Blue",
+                "ghost_shape_J",
                 Pair.createPair(0, 50),
-                SPRITE_SCALE,
-                ResourceManager.get("Green"),
-                ResourceManager.get("ghost_shape_S")
-        ));
+                SPRITE_SCALE));
 
         tetrominos.add(new TetrominoSprite(
-                ResourceManager.get("shape_T"),
-                Pair.createPair(0, 60),
-                SPRITE_SCALE,
-                ResourceManager.get("Purple"),
-                ResourceManager.get("ghost_shape_T")
-        ));
+                "shape_L",
+                "Orange",
+                "ghost_shape_L",
+                Pair.createPair(0, 100),
+                SPRITE_SCALE));
 
         tetrominos.add(new TetrominoSprite(
-                ResourceManager.get("shape_Z"),
-                Pair.createPair(0, 70),
-                SPRITE_SCALE,
-                ResourceManager.get("Red"),
-                ResourceManager.get("ghost_shape_Z")
-        ));
+                "shape_O",
+                "Yellow",
+                "ghost_shape_O",
+                Pair.createPair(0, 150),
+                SPRITE_SCALE));
 
+        tetrominos.add(new TetrominoSprite(
+                "shape_S",
+                "Green",
+                "ghost_shape_S",
+                Pair.createPair(0, 200),
+                SPRITE_SCALE));
+
+        tetrominos.add(new TetrominoSprite(
+                "shape_T",
+                "Purple",
+                "ghost_shape_T",
+                Pair.createPair(0, 250),
+                SPRITE_SCALE));
+
+        tetrominos.add(new TetrominoSprite(
+                "shape_Z",
+                "Red",
+                "ghost_shape_Z",
+                Pair.createPair(0, 300),
+                SPRITE_SCALE));
     }
 
     public void render(SpriteBatch batch) {
