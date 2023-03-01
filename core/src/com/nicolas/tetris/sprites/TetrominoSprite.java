@@ -1,43 +1,34 @@
 package com.nicolas.tetris.sprites;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nicolas.tetris.utils.Pair;
 
+import java.util.Arrays;
+
 public class TetrominoSprite extends TetrisSprite {
-    Sprite square;
-    Sprite ghostSprite;
+
+    String ghostName;
+    String colorName;
+
+    public TetrominoSprite(
+            String spriteName,
+            String colorSquareName,
+            String ghostSpriteName,
+            Pair<Integer, Integer> bottomLeft,
+            float scale
+    ) {
+        super(spriteName, Arrays.asList(colorSquareName, ghostSpriteName), bottomLeft, scale);
+        ghostName = ghostSpriteName;
+        colorName = colorSquareName;
+    }
 
     @Override
     public void render(SpriteBatch batch) {
-        sprite.draw(batch);
+        subSprites.get(colorName).draw(batch);
     }
 
     @Override
     public void update() {
-        System.out.println("Not Implemented");
-    }
-
-    @Override
-    public void scaleSprites() {
-        try {
-            square = scale(square);
-            ghostSprite = scale(ghostSprite);
-            sprite = scale(sprite);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public TetrominoSprite(
-            Sprite sprite,
-            Pair<Integer, Integer> bottomLeft,
-            float scale,
-            Sprite square,
-            Sprite ghostSprite) {
-        super(sprite, bottomLeft, scale);
-        this.square = square;
-        this.ghostSprite = ghostSprite;
-        scaleSprites();
+//        System.out.println("Not Implemented");
     }
 }
