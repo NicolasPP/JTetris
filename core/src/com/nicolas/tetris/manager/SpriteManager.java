@@ -44,7 +44,9 @@ public class SpriteManager implements InputProcessor {
         init();
     }
 
-    private void init(){
+    private void init() {
+        Gdx.input.setInputProcessor(this);
+
         tetrominos.add(new TetrominoSprite(SHAPE_I_NAME, GHOST_SHAPE_I_NAME, LIGHT_BLUE));
         tetrominos.add(new TetrominoSprite(SHAPE_J_NAME, GHOST_SHAPE_J_NAME, BLUE));
         tetrominos.add(new TetrominoSprite(SHAPE_L_NAME, GHOST_SHAPE_L_NAME, ORANGE));
@@ -52,8 +54,6 @@ public class SpriteManager implements InputProcessor {
         tetrominos.add(new TetrominoSprite(SHAPE_S_NAME, GHOST_SHAPE_S_NAME, GREEN));
         tetrominos.add(new TetrominoSprite(SHAPE_T_NAME, GHOST_SHAPE_T_NAME, PURPLE));
         tetrominos.add(new TetrominoSprite(SHAPE_Z_NAME, GHOST_SHAPE_Z_NAME, RED));
-
-        Gdx.input.setInputProcessor(this);
     }
 
     public void render(SpriteBatch batch) {
