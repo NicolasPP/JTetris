@@ -1,5 +1,6 @@
 package com.nicolas.tetris.manager;
 
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.nicolas.tetris.sprites.BoardSprite;
@@ -31,63 +32,29 @@ import static com.nicolas.tetris.config.TetrisConfig.YELLOW;
 import static com.nicolas.tetris.config.TetrisConfig.GREEN;
 import static com.nicolas.tetris.config.TetrisConfig.PURPLE;
 import static com.nicolas.tetris.config.TetrisConfig.RED;
-public class SpriteManager {
+
+public class SpriteManager implements InputProcessor
+{
     final ArrayList<TetrominoSprite> tetrominos = new ArrayList<>();
     final BoardSprite board;
 
     public SpriteManager() {
-       final float SPRITE_SCALE = 0.25f;
 
-        board = new BoardSprite(new Vector2(0, 0), SPRITE_SCALE);
+        board = new BoardSprite(new Vector2(0, 0));
 
-        tetrominos.add(new TetrominoSprite(
-                SHAPE_I_NAME,
-                GHOST_SHAPE_I_NAME,
-                LIGHT_BLUE,
-                new Vector2(0, 0),
-                SPRITE_SCALE));
+        tetrominos.add(new TetrominoSprite(SHAPE_I_NAME, GHOST_SHAPE_I_NAME, LIGHT_BLUE));
 
-        tetrominos.add(new TetrominoSprite(
-                SHAPE_J_NAME,
-                GHOST_SHAPE_J_NAME,
-                BLUE,
-                new Vector2(0, 50),
-                SPRITE_SCALE));
+        tetrominos.add(new TetrominoSprite(SHAPE_J_NAME, GHOST_SHAPE_J_NAME, BLUE));
 
-        tetrominos.add(new TetrominoSprite(
-                SHAPE_L_NAME,
-                GHOST_SHAPE_L_NAME,
-                ORANGE,
-                new Vector2(0, 100),
-                SPRITE_SCALE));
+        tetrominos.add(new TetrominoSprite(SHAPE_L_NAME, GHOST_SHAPE_L_NAME, ORANGE));
 
-        tetrominos.add(new TetrominoSprite(
-                SHAPE_O_NAME,
-                GHOST_SHAPE_O_NAME,
-                YELLOW,
-                new Vector2(0, 150),
-                SPRITE_SCALE));
+        tetrominos.add(new TetrominoSprite(SHAPE_O_NAME, GHOST_SHAPE_O_NAME, YELLOW));
 
-        tetrominos.add(new TetrominoSprite(
-                SHAPE_S_NAME,
-                GHOST_SHAPE_S_NAME,
-                GREEN,
-                new Vector2(0, 200),
-                SPRITE_SCALE));
+        tetrominos.add(new TetrominoSprite(SHAPE_S_NAME, GHOST_SHAPE_S_NAME, GREEN));
 
-        tetrominos.add(new TetrominoSprite(
-                SHAPE_T_NAME,
-                GHOST_SHAPE_T_NAME,
-                PURPLE,
-                new Vector2(0, 250),
-                SPRITE_SCALE));
+        tetrominos.add(new TetrominoSprite(SHAPE_T_NAME, GHOST_SHAPE_T_NAME, PURPLE));
 
-        tetrominos.add(new TetrominoSprite(
-                SHAPE_Z_NAME,
-                GHOST_SHAPE_Z_NAME,
-                RED,
-                new Vector2(0, 300),
-                SPRITE_SCALE));
+        tetrominos.add(new TetrominoSprite(SHAPE_Z_NAME, GHOST_SHAPE_Z_NAME, RED));
     }
 
     public void render(SpriteBatch batch) {
@@ -104,4 +71,43 @@ public class SpriteManager {
         }
     }
 
+    @Override
+    public boolean keyDown(int i) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int i) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char c) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int i, int i1, int i2, int i3) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int i, int i1, int i2, int i3) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int i, int i1, int i2) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int i, int i1) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(float v, float v1) {
+        return false;
+    }
 }
