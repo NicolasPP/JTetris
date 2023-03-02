@@ -26,6 +26,10 @@ public class TetrisConfig {
     final static public String GHOST_SHAPE_S_NAME = "ghost_shape_S";
     final static public String GHOST_SHAPE_T_NAME = "ghost_shape_T";
     final static public String GHOST_SHAPE_Z_NAME = "ghost_shape_Z";
+    final static public float TEXTURE_SCALE = 0.5f;
+    final static public int WINDOW_WIDTH = 512;
+    final static public int WINDOW_HEIGHT = 704;
     final static public int CELL_SIZE = 64;
-
+//    BOARD_COLS = 12;
+//    BOARD_ROWS = 22;
 }
