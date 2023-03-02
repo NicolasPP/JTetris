@@ -1,12 +1,36 @@
 package com.nicolas.tetris.manager;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.nicolas.tetris.sprites.BoardSprite;
 import com.nicolas.tetris.sprites.TetrominoSprite;
-import com.nicolas.tetris.utils.Pair;
 
 import java.util.ArrayList;
 
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_I_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_J_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_L_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_O_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_S_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_T_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_Z_NAME;
+
+import static com.nicolas.tetris.config.TetrisConfig.GHOST_SHAPE_I_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.GHOST_SHAPE_J_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.GHOST_SHAPE_L_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.GHOST_SHAPE_O_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.GHOST_SHAPE_S_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.GHOST_SHAPE_T_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.GHOST_SHAPE_Z_NAME;
+
+
+import static com.nicolas.tetris.config.TetrisConfig.LIGHT_BLUE;
+import static com.nicolas.tetris.config.TetrisConfig.BLUE;
+import static com.nicolas.tetris.config.TetrisConfig.ORANGE;
+import static com.nicolas.tetris.config.TetrisConfig.YELLOW;
+import static com.nicolas.tetris.config.TetrisConfig.GREEN;
+import static com.nicolas.tetris.config.TetrisConfig.PURPLE;
+import static com.nicolas.tetris.config.TetrisConfig.RED;
 public class SpriteManager {
     final ArrayList<TetrominoSprite> tetrominos = new ArrayList<>();
     final BoardSprite board;
@@ -14,55 +38,55 @@ public class SpriteManager {
     public SpriteManager() {
        final float SPRITE_SCALE = 0.25f;
 
-        board = new BoardSprite(new Pair<>(0, 0), SPRITE_SCALE);
+        board = new BoardSprite(new Vector2(0, 0), SPRITE_SCALE);
 
         tetrominos.add(new TetrominoSprite(
-                "shape_I",
-                "LightBlue",
-                "ghost_shape_I",
-                Pair.createPair(0, 0),
+                SHAPE_I_NAME,
+                GHOST_SHAPE_I_NAME,
+                LIGHT_BLUE,
+                new Vector2(0, 0),
                 SPRITE_SCALE));
 
         tetrominos.add(new TetrominoSprite(
-                "shape_J",
-                "Blue",
-                "ghost_shape_J",
-                Pair.createPair(0, 50),
+                SHAPE_J_NAME,
+                GHOST_SHAPE_J_NAME,
+                BLUE,
+                new Vector2(0, 50),
                 SPRITE_SCALE));
 
         tetrominos.add(new TetrominoSprite(
-                "shape_L",
-                "Orange",
-                "ghost_shape_L",
-                Pair.createPair(0, 100),
+                SHAPE_L_NAME,
+                GHOST_SHAPE_L_NAME,
+                ORANGE,
+                new Vector2(0, 100),
                 SPRITE_SCALE));
 
         tetrominos.add(new TetrominoSprite(
-                "shape_O",
-                "Yellow",
-                "ghost_shape_O",
-                Pair.createPair(0, 150),
+                SHAPE_O_NAME,
+                GHOST_SHAPE_O_NAME,
+                YELLOW,
+                new Vector2(0, 150),
                 SPRITE_SCALE));
 
         tetrominos.add(new TetrominoSprite(
-                "shape_S",
-                "Green",
-                "ghost_shape_S",
-                Pair.createPair(0, 200),
+                SHAPE_S_NAME,
+                GHOST_SHAPE_S_NAME,
+                GREEN,
+                new Vector2(0, 200),
                 SPRITE_SCALE));
 
         tetrominos.add(new TetrominoSprite(
-                "shape_T",
-                "Purple",
-                "ghost_shape_T",
-                Pair.createPair(0, 250),
+                SHAPE_T_NAME,
+                GHOST_SHAPE_T_NAME,
+                PURPLE,
+                new Vector2(0, 250),
                 SPRITE_SCALE));
 
         tetrominos.add(new TetrominoSprite(
-                "shape_Z",
-                "Red",
-                "ghost_shape_Z",
-                Pair.createPair(0, 300),
+                SHAPE_Z_NAME,
+                GHOST_SHAPE_Z_NAME,
+                RED,
+                new Vector2(0, 300),
                 SPRITE_SCALE));
     }
 
