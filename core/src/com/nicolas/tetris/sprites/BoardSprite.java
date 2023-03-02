@@ -1,15 +1,16 @@
 package com.nicolas.tetris.sprites;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.nicolas.tetris.utils.Pair;
+import com.badlogic.gdx.math.Vector2;
 
 import java.util.Arrays;
 
+import static com.nicolas.tetris.config.TetrisConfig.BOARD_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.BG_GRAY_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.BG_BLACK_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.BORDER_NAME;
+
 public class BoardSprite extends TetrisSprite {
-    final static private String BG_GRAY_NAME = "BG_gray";
-    final static private String BG_BLACK_NAME = "BG_black";
-    final static private String BORDER_NAME = "Border";
-    final static private String BOARD_NAME = "Board";
 
 //    COLS = 12;
 //    ROWS = 22;
@@ -26,7 +27,7 @@ public class BoardSprite extends TetrisSprite {
     }
 
 
-    public BoardSprite(Pair<Integer, Integer> bottomLeft, float scale) {
+    public BoardSprite(Vector2 bottomLeft, float scale) {
         super(BOARD_NAME, Arrays.asList(BG_GRAY_NAME, BG_BLACK_NAME, BORDER_NAME), bottomLeft, scale);
     }
 
