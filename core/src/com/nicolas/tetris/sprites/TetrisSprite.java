@@ -14,15 +14,14 @@ import static com.nicolas.tetris.config.TetrisConfig.CELL_SIZE;
 
 public abstract class TetrisSprite {
     TextureRegion texture;
-    HashMap<String, TextureRegion> subTexture;
-
+    HashMap<String, TextureRegion> subTextures;
     Vector2 textureSize;
     Vector2 subTextureSize;
 
 
     public TetrisSprite(String textureName, List<String> subTextureNames) {
         this.texture = ResourceManager.get(textureName);
-        this.subTexture = new HashMap<>();
+        this.subTextures = new HashMap<>();
         this.textureSize = new Vector2(
                 TEXTURE_SCALE * texture.getRegionWidth(),
                 TEXTURE_SCALE * texture.getRegionHeight());
@@ -38,7 +37,7 @@ public abstract class TetrisSprite {
 
     private void init(List<String> subTextureNames) {
         subTextureNames.forEach(subTextureName ->
-                subTexture.put(
+                subTextures.put(
                         subTextureName,
                         ResourceManager.get(subTextureName)
                 )
