@@ -12,12 +12,16 @@ import static com.nicolas.tetris.config.TetrisConfig.BORDER_NAME;
 
 public class BoardSprite extends TetrisSprite {
 
-//    COLS = 12;
-//    ROWS = 22;
+    Vector2 bottomLeft;
+
+    public BoardSprite(Vector2 bottomLeft) {
+        super(BOARD_NAME, Arrays.asList(BG_GRAY_NAME, BG_BLACK_NAME, BORDER_NAME));
+        this.bottomLeft = bottomLeft;
+    }
 
     @Override
     public void render(SpriteBatch batch) {
-        sprite.draw(batch);
+        batch.draw(texture, bottomLeft.x, bottomLeft.y, textureSize.x, textureSize.y);
     }
 
 
@@ -25,10 +29,4 @@ public class BoardSprite extends TetrisSprite {
     public void update() {
 //        System.out.println("Not Implemented");
     }
-
-
-    public BoardSprite(Vector2 bottomLeft, float scale) {
-        super(BOARD_NAME, Arrays.asList(BG_GRAY_NAME, BG_BLACK_NAME, BORDER_NAME), bottomLeft, scale);
-    }
-
 }
