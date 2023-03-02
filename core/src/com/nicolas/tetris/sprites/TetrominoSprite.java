@@ -1,30 +1,22 @@
 package com.nicolas.tetris.sprites;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 
 import java.util.Arrays;
 
 public class TetrominoSprite extends TetrisSprite {
-
     String ghostName;
     String colorName;
 
-    public TetrominoSprite(
-            String spriteName,
-            String ghostSpriteName,
-            String colorSquareName,
-            Vector2 bottomLeft,
-            float scale
-    ) {
-        super(spriteName, Arrays.asList(colorSquareName, ghostSpriteName), bottomLeft, scale);
-        ghostName = ghostSpriteName;
-        colorName = colorSquareName;
+    public TetrominoSprite(String textureName, String ghostTextureName, String colorTextureName) {
+        super(textureName, Arrays.asList(colorTextureName, ghostTextureName));
+        ghostName = ghostTextureName;
+        colorName = colorTextureName;
     }
 
     @Override
     public void render(SpriteBatch batch) {
-        sprite.draw(batch);
+        batch.draw(texture, 0, 0, textureSize.x, textureSize.y);
     }
 
     @Override
