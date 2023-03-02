@@ -8,7 +8,7 @@ public class Pair<K, V> {
         return new Pair<>(first, second);
     }
 
-    public Pair(K f, V s){
+    public Pair(K f, V s) {
         first = f;
         second = s;
     }
@@ -16,6 +16,7 @@ public class Pair<K, V> {
     public K getFirst() {
         return first;
     }
+
     public V getSecond() {
         return second;
     }
