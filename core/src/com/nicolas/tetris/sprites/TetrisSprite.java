@@ -38,8 +38,7 @@ public abstract class TetrisSprite {
     public abstract void update();
 
     private void init(List<String> subTextureNames) {
-        for (String subTextureName : subTextureNames) {
-            subTexture.put(subTextureName, ResourceManager.get(subTextureName));
-        }
+        subTextureNames.forEach(subTextureName ->
+                subTexture.put(subTextureName, ResourceManager.get(subTextureName)));
     }
 }
