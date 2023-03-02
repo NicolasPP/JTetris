@@ -1,7 +1,7 @@
 package com.nicolas.tetris.sprites;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.nicolas.tetris.utils.Pair;
+import com.badlogic.gdx.math.Vector2;
 
 import java.util.Arrays;
 
@@ -12,9 +12,9 @@ public class TetrominoSprite extends TetrisSprite {
 
     public TetrominoSprite(
             String spriteName,
-            String colorSquareName,
             String ghostSpriteName,
-            Pair<Integer, Integer> bottomLeft,
+            String colorSquareName,
+            Vector2 bottomLeft,
             float scale
     ) {
         super(spriteName, Arrays.asList(colorSquareName, ghostSpriteName), bottomLeft, scale);
@@ -24,7 +24,7 @@ public class TetrominoSprite extends TetrisSprite {
 
     @Override
     public void render(SpriteBatch batch) {
-        subSprites.get(colorName).draw(batch);
+        sprite.draw(batch);
     }
 
     @Override
