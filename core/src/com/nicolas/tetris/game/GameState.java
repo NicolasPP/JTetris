@@ -4,8 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.nicolas.tetris.sprites.TetrominoSprite;
 import lombok.Data;
 
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.*;
 
 import static com.nicolas.tetris.config.TetrisConfig.GRID_COLS;
 import static com.nicolas.tetris.config.TetrisConfig.GRID_ROWS;
@@ -15,13 +14,10 @@ import static com.nicolas.tetris.config.TetrisConfig.TEXTURE_SCALE;
 
 @Data
 public class GameState {
-
     private LinkedList<int[]> spawnQueue;
     private CellType spawnType;
-
     private final Vector2 boardPos;
     private final Cell[][] state;
-
     private final Vector2 spawnPos;
 
     public GameState(Vector2 boardPosition) {
@@ -31,7 +27,66 @@ public class GameState {
         boardPos = boardPosition;
         spawnPos = new Vector2(3, 19);
         init();
-        print();
+    }
+
+    public void spawn() {
+        if (spawnQueue.isEmpty()) {
+            return;
+        }
+        int[] shapeRow = spawnQueue.poll();
+        for (int index = 0; index < shapeRow.length; index++) {
+            if (shapeRow[index] < 1) {
+                continue;
+            }
+            state[(int) spawnPos.y][(int) spawnPos.x + index].setType(spawnType);
+            state[(int) spawnPos.y][(int) spawnPos.x + index].setUpdateType(UpdateType.FALLING);
+        }
+    }
+
+    public void fall(UpdateType cellUpdateType) {
+        List<Vector2> fallingCellsIndex = getCellsByUpdateType(cellUpdateType);
+
+        if (isFallingCollided(fallingCellsIndex)) {
+            fallingCellsIndex.forEach(index -> state[(int) index.x][(int) index.y].setUpdateType(UpdateType.FALLEN));
+        } else {
+            fallingCellsIndex.forEach(index -> {
+                state[(int) index.x][(int) index.y].setType(CellType.EMPTY);
+                state[(int) index.x][(int) index.y].setUpdateType(UpdateType.EMPTY);
+                state[(int) index.x - 1][(int) index.y].setType(spawnType);
+                state[(int) index.x - 1][(int) index.y].setUpdateType(UpdateType.FALLING);
+            });
+        }
+    }
+
+    public void queueShape(TetrominoSprite tetromino) {
+        Collections.addAll(spawnQueue, tetromino.getCellMap());
+        spawnType = tetromino.getCellType();
+    }
+
+    public boolean isFalling() {
+        for (int row = 0; row < GRID_ROWS; row++) {
+            for (int col = 0; col < GRID_COLS; col++) {
+                if (state[row][col].getUpdateType() == UpdateType.FALLING) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void print() {
+        for (int row = 0; row < GRID_ROWS; row++) {
+            for (int col = 0; col < GRID_COLS; col++) {
+//                System.out.print(state[row][col].getUpdateType() + " ");
+                if (state[row][col].getType() == CellType.EMPTY) {
+                    System.out.print(state[row][col].getType() + " ");
+                } else {
+                    System.out.print("  " + state[row][col].getType() + "  " + " ");
+                }
+            }
+            System.out.println();
+        }
+        System.out.println();
     }
 
     private void init() {
@@ -48,36 +103,25 @@ public class GameState {
         }
     }
 
-    public void print() {
+    private List<Vector2> getCellsByUpdateType(UpdateType updateType) {
+        List<Vector2> filteredIndexes = new ArrayList<>();
         for (int row = 0; row < GRID_ROWS; row++) {
             for (int col = 0; col < GRID_COLS; col++) {
-                if (state[row][col].getType() == CellType.EMPTY) {
-                    System.out.print(state[row][col].getType() + " ");
-                } else {
-                    System.out.print("  " + state[row][col].getType() + "  " + " ");
+                Cell cell = state[row][col];
+                if (cell.getUpdateType() == updateType) {
+                    filteredIndexes.add(new Vector2(row, col));
                 }
             }
-            System.out.println();
         }
-        System.out.println();
+        return filteredIndexes;
     }
 
-    public void queueShape(TetrominoSprite tetromino) {
-        Collections.addAll(spawnQueue, tetromino.getCellMap());
-        spawnType = tetromino.getCellType();
-    }
-
-    public void spawn() {
-        if (spawnQueue.isEmpty()) {
-            return;
-        }
-        int[] shapeRow = spawnQueue.poll();
-        for (int index = 0; index < shapeRow.length; index++) {
-            if (shapeRow[index] < 1) {
-                continue;
+    private boolean isFallingCollided(List<Vector2> fallingCellsIndex) {
+        for (Vector2 index : fallingCellsIndex) {
+            if (index.x - 1 < 0 || state[(int) index.x - 1][(int) index.y].getUpdateType() == UpdateType.FALLEN) {
+                return true;
             }
-            state[(int) spawnPos.y][(int) spawnPos.x + index].setType(spawnType);
-            state[(int) spawnPos.y][(int) spawnPos.x + index].setUpdateType(UpdateType.FALLING);
         }
+        return false;
     }
 }
