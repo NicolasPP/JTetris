@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.nicolas.tetris.game.Cell;
 import com.nicolas.tetris.game.CellType;
 import com.nicolas.tetris.game.GameState;
+import com.nicolas.tetris.game.UpdateType;
 import com.nicolas.tetris.sprites.BoardSprite;
 import com.nicolas.tetris.sprites.TetrominoSprite;
 
@@ -31,7 +32,7 @@ public class SpriteManager implements InputProcessor {
         board = new BoardSprite();
         tetrominos = new HashMap<>();
         gameState = new GameState(new Vector2(0, 0));
-        level = 1;
+        level = 5;
         init();
     }
 
@@ -60,9 +61,10 @@ public class SpriteManager implements InputProcessor {
     public void update(float dt) {
         accumulator += dt;
         if (accumulator >= getTimePerCell()){
-            if (gameState.getSpawnQueue().isEmpty()){
+            if (!gameState.isFalling()){
                 gameState.queueShape(tetrominos.get(CellType.O));
             }
+            gameState.fall(UpdateType.FALLING);
             gameState.spawn();
             accumulator = 0f;
         }
@@ -89,6 +91,7 @@ public class SpriteManager implements InputProcessor {
 
     @Override
     public boolean touchDown(int i, int i1, int i2, int i3) {
+        gameState.print();
         return false;
     }
 
