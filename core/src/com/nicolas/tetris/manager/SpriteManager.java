@@ -62,7 +62,7 @@ public class SpriteManager implements InputProcessor {
     public void update(float dt) {
         accumulator += dt;
         if (accumulator >= getTimePerCell()){
-            if (!gameState.isFalling()){
+            if (gameState.getSpawnTetromino()){
                 gameState.queueShape(getRandomTetromino());
             }
             gameState.fall(UpdateType.FALLING);

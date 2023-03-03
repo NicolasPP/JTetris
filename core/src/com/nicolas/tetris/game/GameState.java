@@ -19,12 +19,15 @@ public class GameState {
     private final Vector2 boardPos;
     private final Cell[][] state;
     private final Vector2 spawnPos;
+    private boolean spawnTetromino;
+
 
     public GameState(Vector2 boardPosition) {
+        boardPos = boardPosition;
         state = new Cell[GRID_ROWS][GRID_COLS];
         spawnQueue = new LinkedList<>();
         spawnType = CellType.EMPTY;
-        boardPos = boardPosition;
+        spawnTetromino = true;
         spawnPos = new Vector2(3, 19);
         init();
     }
@@ -48,6 +51,7 @@ public class GameState {
 
         if (isFallingCollided(fallingCellsIndex)) {
             fallingCellsIndex.forEach(index -> state[(int) index.x][(int) index.y].setUpdateType(UpdateType.FALLEN));
+            spawnTetromino = true;
         } else {
             fallingCellsIndex.forEach(index -> {
                 state[(int) index.x][(int) index.y].setType(CellType.EMPTY);
@@ -61,18 +65,10 @@ public class GameState {
     public void queueShape(TetrominoSprite tetromino) {
         Collections.addAll(spawnQueue, tetromino.getCellMap());
         spawnType = tetromino.getCellType();
+        spawnTetromino = false;
     }
 
-    public boolean isFalling() {
-        for (int row = 0; row < GRID_ROWS; row++) {
-            for (int col = 0; col < GRID_COLS; col++) {
-                if (state[row][col].getUpdateType() == UpdateType.FALLING) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+    public boolean getSpawnTetromino() {return spawnTetromino;}
 
     public void print() {
         for (int row = 0; row < GRID_ROWS; row++) {
