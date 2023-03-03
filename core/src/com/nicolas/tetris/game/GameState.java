@@ -38,7 +38,7 @@ public class GameState {
         }
         int[] shapeRow = spawnQueue.poll();
         for (int index = 0; index < shapeRow.length; index++) {
-            if (shapeRow[index] < 1) {
+            if (shapeRow[index] != 1) {
                 continue;
             }
             state[(int) spawnPos.y][(int) spawnPos.x + index].setType(spawnType);
