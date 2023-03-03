@@ -22,11 +22,14 @@ public class GameState {
     private final Vector2 boardPos;
     private final Cell[][] state;
 
+    private final Vector2 spawnPos;
+
     public GameState(Vector2 boardPosition) {
         state = new Cell[GRID_ROWS][GRID_COLS];
         spawnQueue = new LinkedList<>();
         spawnType = CellType.EMPTY;
         boardPos = boardPosition;
+        spawnPos = new Vector2(3, 19);
         init();
         print();
     }
@@ -40,22 +43,41 @@ public class GameState {
                         .type(CellType.EMPTY)
                         .updateType(UpdateType.EMPTY)
                         .bottomLeft(pos).build();
+
             }
         }
     }
-
 
     public void print() {
         for (int row = 0; row < GRID_ROWS; row++) {
             for (int col = 0; col < GRID_COLS; col++) {
-                System.out.print(state[row][col].getType() + " ");
+                if (state[row][col].getType() == CellType.EMPTY) {
+                    System.out.print(state[row][col].getType() + " ");
+                } else {
+                    System.out.print("  " + state[row][col].getType() + "  " + " ");
+                }
             }
             System.out.println();
         }
+        System.out.println();
     }
 
-    public void spawnShape(TetrominoSprite tetromino) {
+    public void queueShape(TetrominoSprite tetromino) {
         Collections.addAll(spawnQueue, tetromino.getCellMap());
         spawnType = tetromino.getCellType();
+    }
+
+    public void spawn() {
+        if (spawnQueue.isEmpty()) {
+            return;
+        }
+        int[] shapeRow = spawnQueue.poll();
+        for (int index = 0; index < shapeRow.length; index++) {
+            if (shapeRow[index] < 1) {
+                continue;
+            }
+            state[(int) spawnPos.y][(int) spawnPos.x + index].setType(spawnType);
+            state[(int) spawnPos.y][(int) spawnPos.x + index].setUpdateType(UpdateType.FALLING);
+        }
     }
 }

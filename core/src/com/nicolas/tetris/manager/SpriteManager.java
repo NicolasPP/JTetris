@@ -21,12 +21,17 @@ public class SpriteManager implements InputProcessor {
 
     private final GameState gameState;
 
+    private int level;
+
+    private float accumulator;
+
 
 
     public SpriteManager() {
         board = new BoardSprite();
         tetrominos = new HashMap<>();
         gameState = new GameState(new Vector2(0, 0));
+        level = 1;
         init();
     }
 
@@ -53,8 +58,18 @@ public class SpriteManager implements InputProcessor {
     }
 
     public void update(float dt) {
-        board.update();
-        tetrominos.forEach((type, tetromino) -> tetromino.update());
+        accumulator += dt;
+        if (accumulator >= getTimePerCell()){
+            if (gameState.getSpawnQueue().isEmpty()){
+                gameState.queueShape(tetrominos.get(CellType.O));
+            }
+            gameState.spawn();
+            accumulator = 0f;
+        }
+    }
+
+    private float getTimePerCell(){
+        return (float) Math.pow(0.8f - ((level -1)*0.007f), level - 1);
     }
 
     @Override
