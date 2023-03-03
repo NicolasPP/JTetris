@@ -1,6 +1,7 @@
 package com.nicolas.tetris.manager;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -15,7 +16,38 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
-import static com.nicolas.tetris.config.TetrisConfig.*;
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_I_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_J_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_L_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_O_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_S_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_T_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_Z_NAME;
+
+import static com.nicolas.tetris.config.TetrisConfig.GHOST_SHAPE_I_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.GHOST_SHAPE_J_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.GHOST_SHAPE_L_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.GHOST_SHAPE_O_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.GHOST_SHAPE_S_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.GHOST_SHAPE_T_NAME;
+import static com.nicolas.tetris.config.TetrisConfig.GHOST_SHAPE_Z_NAME;
+
+import static com.nicolas.tetris.config.TetrisConfig.LIGHT_BLUE;
+import static com.nicolas.tetris.config.TetrisConfig.BLUE;
+import static com.nicolas.tetris.config.TetrisConfig.ORANGE;
+import static com.nicolas.tetris.config.TetrisConfig.YELLOW;
+import static com.nicolas.tetris.config.TetrisConfig.GREEN;
+import static com.nicolas.tetris.config.TetrisConfig.PURPLE;
+import static com.nicolas.tetris.config.TetrisConfig.RED;
+
+
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_I_MAP;
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_J_MAP;
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_L_MAP;
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_O_MAP;
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_S_MAP;
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_T_MAP;
+import static com.nicolas.tetris.config.TetrisConfig.SHAPE_Z_MAP;
 
 public class SpriteManager implements InputProcessor {
     private final HashMap<CellType, TetrominoSprite> tetrominos;
@@ -23,17 +55,16 @@ public class SpriteManager implements InputProcessor {
 
     private final GameState gameState;
 
-    private int level;
+    private final int level;
 
     private float accumulator;
-
 
 
     public SpriteManager() {
         board = new BoardSprite();
         tetrominos = new HashMap<>();
         gameState = new GameState(new Vector2(0, 0));
-        level = 5;
+        level = 1;
         init();
     }
 
@@ -52,38 +83,46 @@ public class SpriteManager implements InputProcessor {
     public void render(SpriteBatch batch) {
         board.render(batch, gameState.getBoardPos());
 
-        Arrays.stream(gameState.getState()).forEach(row -> Arrays.stream(row)
-                        .filter(Cell::isCellTypeNotEmpty)
-                        .forEach(cell -> tetrominos.get(cell.getType()).render(batch, cell.getBottomLeft()))
-        );
+        Arrays.stream(gameState.getState()).forEach(
+                row -> Arrays.stream(row).filter(Cell::isCellTypeNotEmpty).forEach(
+                        cell -> tetrominos.get(cell.getType()).render(batch, cell.getBottomLeft())));
 
     }
 
     public void update(float dt) {
         accumulator += dt;
-        if (accumulator >= getTimePerCell()){
-            if (gameState.getSpawnTetromino()){
-                gameState.queueShape(getRandomTetromino());
+        if (accumulator >= getTimePerCell()) {
+            if (gameState.getCanSpawn()) {
+                gameState.queueTetrominoSpawn(getRandomTetromino());
             }
-            gameState.fall(UpdateType.FALLING);
+            gameState.shift(GameState.ShiftDirection.DOWN, UpdateType.FALLING);
             gameState.spawn();
             accumulator = 0f;
         }
     }
 
-    private TetrominoSprite getRandomTetromino(){
+    private TetrominoSprite getRandomTetromino() {
         CellType[] keyArr = new CellType[tetrominos.size()];
         int randomIndex = new Random().nextInt(tetrominos.size());
         tetrominos.keySet().toArray(keyArr);
         return tetrominos.get(keyArr[randomIndex]);
     }
 
-    private float getTimePerCell(){
-        return (float) Math.pow(0.8f - ((level -1)*0.007f), level - 1);
+    private float getTimePerCell() {
+        return (float) Math.pow(0.8f - ((level - 1) * 0.007f), level - 1);
     }
 
     @Override
     public boolean keyDown(int i) {
+        switch (i) {
+            case Input.Keys.RIGHT:
+                gameState.shift(GameState.ShiftDirection.RIGHT, UpdateType.FALLING);
+                break;
+            case Input.Keys.LEFT:
+                gameState.shift(GameState.ShiftDirection.LEFT, UpdateType.FALLING);
+                break;
+
+        }
         return false;
     }
 
