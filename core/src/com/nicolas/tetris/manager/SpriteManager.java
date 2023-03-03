@@ -52,7 +52,7 @@ public class SpriteManager implements InputProcessor {
 
     }
 
-    public void update() {
+    public void update(float dt) {
         board.update();
         tetrominos.forEach((type, tetromino) -> tetromino.update());
     }
