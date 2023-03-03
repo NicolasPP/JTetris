@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.nicolas.tetris.game.Cell;
 import com.nicolas.tetris.game.CellType;
 import com.nicolas.tetris.game.GameState;
 import com.nicolas.tetris.sprites.BoardSprite;
@@ -44,11 +45,11 @@ public class SpriteManager implements InputProcessor {
     public void render(SpriteBatch batch) {
         board.render(batch, gameState.getBoardPos());
 
-        Arrays.stream(gameState.getState()).forEach(row ->
-                Arrays.stream(row).forEach(cell ->
-                        tetrominos.get(CellType.O).render(batch, cell.getBottomLeft())
-                )
+        Arrays.stream(gameState.getState()).forEach(row -> Arrays.stream(row)
+                        .filter(Cell::isCellTypeNotEmpty)
+                        .forEach(cell -> tetrominos.get(cell.getType()).render(batch, cell.getBottomLeft()))
         );
+
     }
 
     public void update() {
