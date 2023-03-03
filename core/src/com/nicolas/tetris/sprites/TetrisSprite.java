@@ -31,7 +31,7 @@ public abstract class TetrisSprite {
         init(subTextureNames);
     }
 
-    public abstract void render(SpriteBatch batch);
+    public abstract void render(SpriteBatch batch, Vector2 position);
 
     public abstract void update();
 
