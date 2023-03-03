@@ -85,7 +85,7 @@ public class SpriteManager implements InputProcessor {
 
         Arrays.stream(gameState.getState()).forEach(
                 row -> Arrays.stream(row).filter(Cell::isCellTypeNotEmpty).forEach(
-                        cell -> tetrominos.get(cell.getType()).render(batch, cell.getBottomLeft())));
+                        cell -> tetrominos.get(cell.getType()).renderSquare(batch, cell.getBottomLeft())));
 
     }
 
