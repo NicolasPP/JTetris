@@ -40,7 +40,6 @@ public class TetrisConfig {
     final static public int CELL_SIZE = 64;
     final static public int BOARD_COLS = 12;
     final static public int BOARD_ROWS = 22;
-    public final static int SPAWN_ROWS = 4;
-    public final static int GRID_ROWS = BOARD_ROWS + 2;
+    public final static int GRID_ROWS = BOARD_ROWS - 2;
     public final static int GRID_COLS = BOARD_COLS - 2;
 }
