@@ -13,6 +13,7 @@ import com.nicolas.tetris.sprites.TetrominoSprite;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Random;
 
 import static com.nicolas.tetris.config.TetrisConfig.*;
 
@@ -62,12 +63,19 @@ public class SpriteManager implements InputProcessor {
         accumulator += dt;
         if (accumulator >= getTimePerCell()){
             if (!gameState.isFalling()){
-                gameState.queueShape(tetrominos.get(CellType.O));
+                gameState.queueShape(getRandomTetromino());
             }
             gameState.fall(UpdateType.FALLING);
             gameState.spawn();
             accumulator = 0f;
         }
+    }
+
+    private TetrominoSprite getRandomTetromino(){
+        CellType[] keyArr = new CellType[tetrominos.size()];
+        int randomIndex = new Random().nextInt(tetrominos.size());
+        tetrominos.keySet().toArray(keyArr);
+        return tetrominos.get(keyArr[randomIndex]);
     }
 
     private float getTimePerCell(){
@@ -91,7 +99,6 @@ public class SpriteManager implements InputProcessor {
 
     @Override
     public boolean touchDown(int i, int i1, int i2, int i3) {
-        gameState.print();
         return false;
     }
 
