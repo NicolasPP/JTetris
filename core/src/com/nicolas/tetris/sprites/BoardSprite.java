@@ -9,10 +9,10 @@ import static com.nicolas.tetris.config.TetrisConfig.BOARD_NAME;
 import static com.nicolas.tetris.config.TetrisConfig.BG_GRAY_NAME;
 import static com.nicolas.tetris.config.TetrisConfig.BG_BLACK_NAME;
 import static com.nicolas.tetris.config.TetrisConfig.BORDER_NAME;
-
 public class BoardSprite extends TetrisSprite {
 
-    Vector2 bottomLeft;
+    final private Vector2 bottomLeft;
+
 
     public BoardSprite(Vector2 bottomLeft) {
         super(BOARD_NAME, Arrays.asList(BG_GRAY_NAME, BG_BLACK_NAME, BORDER_NAME));
@@ -20,8 +20,8 @@ public class BoardSprite extends TetrisSprite {
     }
 
     @Override
-    public void render(SpriteBatch batch) {
-        batch.draw(texture, bottomLeft.x, bottomLeft.y, textureSize.x, textureSize.y);
+    public void render(SpriteBatch batch, Vector2 position) {
+        batch.draw(texture, position.x, position.y, textureSize.x, textureSize.y);
     }
 
 
@@ -29,4 +29,6 @@ public class BoardSprite extends TetrisSprite {
     public void update() {
 //        System.out.println("Not Implemented");
     }
+
+    public Vector2 getBottomLeft(){return bottomLeft;}
 }
