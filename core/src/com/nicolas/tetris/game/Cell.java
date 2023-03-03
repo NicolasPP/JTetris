@@ -11,4 +11,8 @@ public class Cell {
 
     private UpdateType updateType;
     private Vector2 bottomLeft;
+
+    public boolean isCellTypeNotEmpty(){
+        return type != CellType.EMPTY;
+    }
 }
