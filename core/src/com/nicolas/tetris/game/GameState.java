@@ -12,82 +12,70 @@ import static com.nicolas.tetris.config.TetrisConfig.*;
 
 @Data
 public class GameState {
-    private LinkedList<int[]> spawnQueue;
     private CellType spawnType;
     private final Vector2 boardPos;
     private final Cell[][] state;
     private boolean canSpawn;
 
-    private int colSpawnOffset;
-
-    public enum ShiftDirection{
+    public enum ShiftDirection {
         DOWN, RIGHT, LEFT
     }
+
     public GameState(Vector2 boardPosition) {
         boardPos = boardPosition;
         state = new Cell[GRID_ROWS][GRID_COLS];
-        spawnQueue = new LinkedList<>();
         spawnType = CellType.EMPTY;
         canSpawn = true;
-        colSpawnOffset = 0;
         init();
     }
 
-    public void spawn() {
-        if (spawnQueue.isEmpty()) {
-            return;
-        }
-
-        int[] shapeRow = spawnQueue.poll();
-        for (int index = 0; index < shapeRow.length; index++) {
-            if (shapeRow[index] != 1) {
-                continue;
-            }
-            state[SPAWN_ROW][SPAWN_COl + index + colSpawnOffset].setType(spawnType);
-            state[SPAWN_ROW][SPAWN_COl + index + colSpawnOffset].setUpdateType(UpdateType.FALLING);
-        }
-    }
-
-    public void shift(ShiftDirection direction, UpdateType updateType){
+    public void shift(ShiftDirection direction, UpdateType updateType) {
         Vector2 directionOffset = getDirectionOffset(direction);
         List<Vector2> cellsIndex = getCellsIndexByUpdateType(updateType);
 
-        if (isCellsCollided(cellsIndex, directionOffset, updateType)){
-            if (direction == ShiftDirection.DOWN){
+        if (isFallingCollided(cellsIndex, directionOffset)) {
+            if (direction == ShiftDirection.DOWN) {
                 cellsIndex.forEach(index -> state[(int) index.x][(int) index.y].setUpdateType(UpdateType.FALLEN));
                 canSpawn = true;
             }
         } else {
-            if (direction != ShiftDirection.DOWN) {
-                colSpawnOffset += directionOffset.y;
-            }
-
             cellsIndex.forEach(index -> {
-                state[(int) index.x][(int) index.y].setType(CellType.EMPTY);
-                state[(int) index.x][(int) index.y].setUpdateType(UpdateType.EMPTY);
+                if (index.x >= GRID_ROWS - SPAWN_ROW_COUNT) {
+                    state[(int) index.x][(int) index.y].setType(CellType.SPAWN);
+                    state[(int) index.x][(int) index.y].setUpdateType(UpdateType.SKIP);
+                } else {
+                    state[(int) index.x][(int) index.y].setType(CellType.EMPTY);
+                    state[(int) index.x][(int) index.y].setUpdateType(UpdateType.SKIP);
+                }
             });
             cellsIndex.forEach(index -> {
                 state[(int) (index.x + directionOffset.x)][(int) (index.y + directionOffset.y)].setType(spawnType);
                 state[(int) (index.x + directionOffset.x)][(int) (index.y + directionOffset.y)].setUpdateType(UpdateType.FALLING);
-
             });
         }
     }
 
-    public void queueTetrominoSpawn(TetrominoSprite tetromino) {
-        Collections.addAll(spawnQueue, tetromino.getCellMap());
+    public void spawnTetromino(TetrominoSprite tetromino) {
         spawnType = tetromino.getCellType();
         canSpawn = false;
-        colSpawnOffset = 0;
+        IntStream.range(0, tetromino.getCellMap().length).forEach(row -> IntStream.range(0, tetromino.getCellMap()[row].length).forEach(col -> {
+            if (tetromino.getCellMap()[row][col] == 1) {
+                state[SPAWN_ROW - row][SPAWN_COl + col].setType(spawnType);
+                state[SPAWN_ROW - row][SPAWN_COl + col].setUpdateType(UpdateType.FALLING);
+            }
+        }));
+        print();
     }
 
-    public boolean getCanSpawn() {return canSpawn;}
+    public boolean getCanSpawn() {
+        return canSpawn;
+    }
 
     public void print() {
         for (int row = 0; row < GRID_ROWS; row++) {
             for (int col = 0; col < GRID_COLS; col++) {
 //                System.out.print(state[row][col].getUpdateType() + " ");
-                if (state[row][col].getType() == CellType.EMPTY) {
+                if (state[row][col].getType() == CellType.EMPTY || state[row][col].getType() == CellType.SPAWN) {
                     System.out.print(state[row][col].getType() + " ");
                 } else {
                     System.out.print("  " + state[row][col].getType() + "  " + " ");
@@ -100,41 +88,30 @@ public class GameState {
 
     private void init() {
         float cellSize = CELL_SIZE * TEXTURE_SCALE;
-        for (int row = 0; row < GRID_ROWS; row++) {
-            for (int col = 0; col < GRID_COLS; col++) {
-                Vector2 pos = new Vector2((col + 1) * cellSize, (row + 1) * cellSize);
-                state[row][col] = Cell.builder()
-                        .type(CellType.EMPTY)
-                        .updateType(UpdateType.EMPTY)
-                        .bottomLeft(pos)
-                        .build();
+        Vector2 spawnPos = new Vector2(-1, -1);
+        IntStream.range(0, GRID_ROWS).forEach(row -> IntStream.range(0, GRID_COLS).forEach(col -> {
+            Vector2 pos = new Vector2((col + 1) * cellSize, (row + 1) * cellSize);
+            state[row][col] = Cell.builder().type(CellType.EMPTY).updateType(UpdateType.SKIP).bottomLeft(pos).build();
+            if (row >= GRID_ROWS - SPAWN_ROW_COUNT) {
+                state[row][col].setType(CellType.SPAWN);
+                state[row][col].setUpdateType(UpdateType.SKIP);
+                state[row][col].setBottomLeft(spawnPos);
             }
-        }
+        }));
     }
 
     private List<Vector2> getCellsIndexByUpdateType(UpdateType updateType) {
         List<Vector2> filteredIndexes = new ArrayList<>();
-        for (int row = 0; row < GRID_ROWS; row++) {
-            for (int col = 0; col < GRID_COLS; col++) {
-                Cell cell = state[row][col];
-                if (cell.getUpdateType() == updateType) {
-                    filteredIndexes.add(new Vector2(row, col));
-                }
+        IntStream.range(0, GRID_ROWS).forEach(row -> IntStream.range(0, GRID_COLS).forEach(col -> {
+            if (state[row][col].getUpdateType() == updateType) {
+                filteredIndexes.add(new Vector2(row, col));
             }
-        }
+        }));
         return filteredIndexes;
     }
 
     private boolean isFallingCollided(List<Vector2> fallingCellsIndex, Vector2 directionOffset) {
-        List<Vector2> cellsIndex = new ArrayList<>(fallingCellsIndex);
-
-        if (directionOffset.x == 0 && !spawnQueue.isEmpty()){
-            spawnQueue.forEach(row ->
-                IntStream.range(0, row.length).filter(index -> row[index] == 1).forEach(index ->
-                        cellsIndex.add(new Vector2(SPAWN_ROW,SPAWN_COl + index + colSpawnOffset))));
-        }
-
-        for (Vector2 index : cellsIndex) {
+        for (Vector2 index : fallingCellsIndex) {
             if (index.x + directionOffset.x < 0 || index.y + directionOffset.y < 0 || index.y + directionOffset.y >= GRID_COLS ||
                     state[(int) (index.x + directionOffset.x)][(int) (index.y + directionOffset.y)].getUpdateType() == UpdateType.FALLEN) {
                 return true;
@@ -143,33 +120,15 @@ public class GameState {
         return false;
     }
 
-    private boolean isCellsCollided(List<Vector2> cellsIndex, Vector2 directionOffset, UpdateType updateType){
-        switch (updateType){
-            case FALLEN:
-                return isFallenCollided(cellsIndex, directionOffset);
-            case FALLING:
-                return isFallingCollided(cellsIndex, directionOffset);
-        }
-        return false;
-    }
-
-    private boolean isFallenCollided(List<Vector2> cellsIndex, Vector2 directionOffset) {
-        return false;
-    }
-
-    public static Vector2 getDirectionOffset(ShiftDirection direction){
-        Vector2 offset = new Vector2(0, 0);
-        switch (direction){
+    public static Vector2 getDirectionOffset(ShiftDirection direction) {
+        switch (direction) {
             case DOWN:
-                offset =  new Vector2(-1, 0);
-                break;
+                return new Vector2(-1, 0);
             case RIGHT:
-                offset =  new Vector2(0, 1);
-                break;
+                return new Vector2(0, 1);
             case LEFT:
-                offset =  new Vector2(0, -1);
-                break;
+                return new Vector2(0, -1);
         }
-        return offset;
+        return new Vector2(0, 0);
     }
 }
