@@ -64,7 +64,7 @@ public class SpriteManager implements InputProcessor {
         board = new BoardSprite();
         tetrominos = new HashMap<>();
         gameState = new GameState(new Vector2(0, 0));
-        level = 1;
+        level = 4;
         init();
     }
 
@@ -84,7 +84,7 @@ public class SpriteManager implements InputProcessor {
         board.render(batch, gameState.getBoardPos());
 
         Arrays.stream(gameState.getState()).forEach(
-                row -> Arrays.stream(row).filter(Cell::isCellTypeNotEmpty).forEach(
+                row -> Arrays.stream(row).filter(Cell::isNotEmpty).filter(Cell::isNotSpawn).forEach(
                         cell -> tetrominos.get(cell.getType()).renderSquare(batch, cell.getBottomLeft())));
 
     }
@@ -93,10 +93,9 @@ public class SpriteManager implements InputProcessor {
         accumulator += dt;
         if (accumulator >= getTimePerCell()) {
             if (gameState.getCanSpawn()) {
-                gameState.queueTetrominoSpawn(getRandomTetromino());
+                gameState.spawnTetromino(getRandomTetromino());
             }
             gameState.shift(GameState.ShiftDirection.DOWN, UpdateType.FALLING);
-            gameState.spawn();
             accumulator = 0f;
         }
     }
@@ -138,6 +137,7 @@ public class SpriteManager implements InputProcessor {
 
     @Override
     public boolean touchDown(int i, int i1, int i2, int i3) {
+        gameState.print();
         return false;
     }
 
