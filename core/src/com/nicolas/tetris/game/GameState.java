@@ -17,9 +17,6 @@ public class GameState {
     private final Cell[][] state;
     private boolean canSpawn;
 
-    public enum ShiftDirection {
-        DOWN, RIGHT, LEFT
-    }
 
     public GameState(Vector2 boardPosition) {
         boardPos = boardPosition;
@@ -64,7 +61,6 @@ public class GameState {
                 state[SPAWN_ROW - row][SPAWN_COl + col].setUpdateType(UpdateType.FALLING);
             }
         }));
-        print();
     }
 
     public boolean getCanSpawn() {
