@@ -28,6 +28,9 @@ public class TetrominoSprite extends TetrisSprite {
     }
 
     public void renderSquare(SpriteBatch batch, Vector2 position) {
+        if (position.x < 0 || position.y < 0){
+            return;
+        }
         batch.draw(getSubTextures().get(colorName), position.x, position.y, getSubTextureSize().x, getSubTextureSize().y);
     }
 
