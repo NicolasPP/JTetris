@@ -2,8 +2,8 @@ package com.nicolas.tetris.sprites;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.nicolas.tetris.game.CellType;
-import com.nicolas.tetris.game.TetrominoState;
+import com.nicolas.tetris.game.cell.CellType;
+import com.nicolas.tetris.game.tetromino.TetrominoState;
 
 import java.util.Arrays;
 import java.util.stream.IntStream;

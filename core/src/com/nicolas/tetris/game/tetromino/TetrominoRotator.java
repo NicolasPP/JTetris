@@ -1,4 +1,4 @@
-package com.nicolas.tetris.game;
+package com.nicolas.tetris.game.tetromino;
 
 import com.badlogic.gdx.math.Vector2;
 

@@ -1,4 +1,6 @@
-package com.nicolas.tetris.game;
+package com.nicolas.tetris.game.tetromino;
+
+import com.nicolas.tetris.game.cell.CellType;
 
 import java.util.*;
 

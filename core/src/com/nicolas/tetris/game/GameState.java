@@ -1,6 +1,12 @@
 package com.nicolas.tetris.game;
 
 import com.badlogic.gdx.math.Vector2;
+import com.nicolas.tetris.game.cell.Cell;
+import com.nicolas.tetris.game.cell.CellType;
+import com.nicolas.tetris.game.cell.UpdateType;
+import com.nicolas.tetris.game.tetromino.RotationDirection;
+import com.nicolas.tetris.game.tetromino.TetrominoRotator;
+import com.nicolas.tetris.game.tetromino.TetrominoState;
 import com.nicolas.tetris.sprites.TetrominoSprite;
 import lombok.Data;
 
