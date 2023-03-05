@@ -11,7 +11,6 @@ import com.nicolas.tetris.sprites.TetrominoSprite;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Random;
 
 import static com.nicolas.tetris.config.TetrisConfig.SHAPE_I_NAME;
 import static com.nicolas.tetris.config.TetrisConfig.SHAPE_J_NAME;
@@ -37,7 +36,6 @@ import static com.nicolas.tetris.config.TetrisConfig.GREEN;
 import static com.nicolas.tetris.config.TetrisConfig.PURPLE;
 import static com.nicolas.tetris.config.TetrisConfig.RED;
 
-
 import static com.nicolas.tetris.config.TetrisConfig.SHAPE_I_MAP;
 import static com.nicolas.tetris.config.TetrisConfig.SHAPE_J_MAP;
 import static com.nicolas.tetris.config.TetrisConfig.SHAPE_L_MAP;
@@ -47,13 +45,11 @@ import static com.nicolas.tetris.config.TetrisConfig.SHAPE_T_MAP;
 import static com.nicolas.tetris.config.TetrisConfig.SHAPE_Z_MAP;
 
 public class SpriteManager implements InputProcessor {
-    private final HashMap<CellType, TetrominoSprite> tetrominos;
     private final BoardSprite board;
-
+    private final HashMap<CellType, TetrominoSprite> tetrominos;
     private final GameState gameState;
-
+    private final TetrominoBagRandomizer bagRandomizer;
     private final int level;
-
     private float accumulator;
 
 
@@ -61,7 +57,9 @@ public class SpriteManager implements InputProcessor {
         board = new BoardSprite();
         tetrominos = new HashMap<>();
         gameState = new GameState();
-        level = 8;
+        bagRandomizer = new TetrominoBagRandomizer();
+        accumulator = 0f;
+        level = 1;
         init();
     }
 
@@ -89,19 +87,10 @@ public class SpriteManager implements InputProcessor {
     public void update(float dt) {
         accumulator += dt;
         if (accumulator >= getTimePerCell()) {
-            if (gameState.isCanSpawn()) {
-                gameState.spawnTetromino(getRandomTetromino());
-            }
+            if (gameState.isSpawnUnlocked())gameState.spawnTetromino(tetrominos.get(bagRandomizer.getNext()));
             gameState.shift(ShiftDirection.DOWN, UpdateType.FALLING);
             accumulator = 0f;
         }
-    }
-
-    private TetrominoSprite getRandomTetromino() {
-        CellType[] keyArr = new CellType[tetrominos.size()];
-        int randomIndex = new Random().nextInt(tetrominos.size());
-        tetrominos.keySet().toArray(keyArr);
-        return tetrominos.get(keyArr[randomIndex]);
     }
 
     private float getTimePerCell() {return (float) Math.pow(0.8f - ((level - 1) * 0.007f), level - 1);}
