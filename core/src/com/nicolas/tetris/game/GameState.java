@@ -30,7 +30,7 @@ public class GameState {
 
         if (isFallingCollided(cellsIndex, directionOffset)) {
             if (direction == ShiftDirection.DOWN) {
-                cellsIndex.forEach(index -> state[(int) index.x][(int) index.y].setUpdateType(UpdateType.FALLEN));
+                cellsIndex.forEach(index -> state[(int) index.x][(int) index.y].setUpdateType(UpdateType.LOCKED));
                 canSpawn = true;
             }
         } else {
@@ -129,7 +129,7 @@ public class GameState {
                 int nextCol = (int) (tetrominoState.getPos().y + col);
                 if (tetrominoState.getCellMap()[row][col] == 0) continue;
                 if (nextRow >= GRID_ROWS || nextRow < 0 || nextCol >= GRID_COLS || nextCol < 0) return false;
-                if (state[nextRow][nextCol].getUpdateType() == UpdateType.FALLEN) return false;
+                if (state[nextRow][nextCol].getUpdateType() == UpdateType.LOCKED) return false;
             }
         }
         return true;
@@ -159,7 +159,7 @@ public class GameState {
             int row = (int) (index.x + directionOffset.x);
             int col = (int) (index.y + directionOffset.y);
             if (row < 0 || col < 0 || col >= GRID_COLS
-                    || state[row][col].getUpdateType() == UpdateType.FALLEN) return true;
+                    || state[row][col].getUpdateType() == UpdateType.LOCKED) return true;
         }
         return false;
     }
