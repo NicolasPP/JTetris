@@ -18,13 +18,12 @@ import static com.nicolas.tetris.config.TetrisConfig.*;
 
 @Data
 public class GameState {
-    private final Cell[][] state;
+    private final Cell[][] state = new Cell[GRID_ROWS][GRID_COLS];
+    private boolean spawnUnlocked = true;
+
     private TetrominoState tetrominoState;
-    private boolean spawnUnlocked;
 
     public GameState() {
-        state = new Cell[GRID_ROWS][GRID_COLS];
-        spawnUnlocked = true;
         init();
     }
 
@@ -34,15 +33,25 @@ public class GameState {
         Vector2 directionOffset = getDirectionOffset(direction);
         List<Vector2> cellsIndex = getCellsIndexByUpdateType(updateType);
 
-        if (isFallingCollided(cellsIndex, directionOffset)) {
+        CellType[][] types = new CellType[GRID_ROWS][GRID_COLS];
+        for (CellType[] row : types) Arrays.fill(row, CellType.EMPTY);
+
+
+        boolean isCollided = isCollided(cellsIndex, directionOffset);
+        if (isCollided) {
             if (direction == ShiftDirection.DOWN) {
-                cellsIndex.forEach(index -> state[(int) index.x][(int) index.y].setUpdateType(UpdateType.LOCKED));
-                spawnUnlocked = true;
+                if(updateType == UpdateType.FALLING || updateType == UpdateType.LOCK_FALL){
+                    cellsIndex.forEach(index -> state[(int) index.x][(int) index.y].setUpdateType(UpdateType.LOCKED));
+                }
+                if(updateType == UpdateType.FALLING) spawnUnlocked = true;
             }
         } else {
-            tetrominoState.getPos().x += directionOffset.x;
-            tetrominoState.getPos().y += directionOffset.y;
+            if (updateType == UpdateType.FALLING) {
+                tetrominoState.getPos().x += directionOffset.x;
+                tetrominoState.getPos().y += directionOffset.y;
+            }
             cellsIndex.forEach(index -> {
+                types[(int) index.x][(int) index.y] = state[(int) index.x][(int) index.y].getType();
                 if (index.x >= GRID_ROWS - SPAWN_ROW_COUNT) {
                     state[(int) index.x][(int) index.y].setType(CellType.SPAWN);
                     state[(int) index.x][(int) index.y].setUpdateType(UpdateType.SKIP);
@@ -51,11 +60,12 @@ public class GameState {
                     state[(int) index.x][(int) index.y].setUpdateType(UpdateType.SKIP);
                 }
             });
+
             cellsIndex.forEach(index -> {
                 int row = (int) (index.x + directionOffset.x);
                 int col = (int) (index.y + directionOffset.y);
-                state[row][col].setType(tetrominoState.getType());
-                state[row][col].setUpdateType(UpdateType.FALLING);
+                state[row][col].setType(types[(int) index.x][(int) index.y]);
+                state[row][col].setUpdateType(updateType);
             });
         }
     }
@@ -102,6 +112,40 @@ public class GameState {
             }
         }));
     }
+
+    public int processFilledLines() {
+        List<Cell[]> lines = new ArrayList<>();
+
+        int minRow = GRID_ROWS;
+
+        for (int row = 0; row < state.length; row++) {
+            if (row < GRID_ROWS - SPAWN_ROW_COUNT &&
+                    Arrays.stream(state[row]).filter(Cell::isLocked).count() == 10) {
+                lines.add(state[row]);
+                minRow = Math.min(minRow, row);
+            }
+        }
+
+        if (lines.size() == 0) return 0;
+
+
+        lines.forEach(line -> Arrays.stream(line).forEach(cell -> {
+            cell.setType(CellType.EMPTY);
+            cell.setUpdateType(UpdateType.SKIP);
+        }));
+
+
+        for (int row = 0; row < state.length; row++) {
+            if (row >= GRID_ROWS - SPAWN_ROW_COUNT || row < minRow) continue;
+            for (int col = 0; col < state[row].length; col++) {
+                Cell cell = state[row][col];
+                if(cell.getUpdateType() == UpdateType.LOCKED) cell.setUpdateType(UpdateType.LOCK_FALL);
+            }
+        }
+
+        return lines.size();
+    }
+
     public void print() {
         for (int row = 0; row < GRID_ROWS; row++) {
             for (int col = 0; col < GRID_COLS; col++) {
@@ -162,8 +206,8 @@ public class GameState {
         return new Vector2(0, 0);
     }
 
-    private boolean isFallingCollided(List<Vector2> fallingCellsIndex, Vector2 directionOffset) {
-        for (Vector2 index : fallingCellsIndex) {
+    private boolean isCollided(List<Vector2> cellsIndex, Vector2 directionOffset) {
+        for (Vector2 index : cellsIndex) {
             int row = (int) (index.x + directionOffset.x);
             int col = (int) (index.y + directionOffset.y);
             if (row < 0 || col < 0 || col >= GRID_COLS
