@@ -1,5 +1,5 @@
 package com.nicolas.tetris.game.cell;
 
 public enum UpdateType {
-    SKIP, LOCKED, FALLING
+    SKIP, LOCKED, FALLING, LOCK_FALL
 }
