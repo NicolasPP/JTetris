@@ -7,6 +7,10 @@ import static com.nicolas.tetris.config.TetrisConfig.BG_GRAY_NAME;
 import static com.nicolas.tetris.config.TetrisConfig.BG_BLACK_NAME;
 import static com.nicolas.tetris.config.TetrisConfig.BORDER_NAME;
 public class BoardSprite extends TetrisSprite {
+
+    private final static BoardSprite board = new BoardSprite();
+
+    public static BoardSprite get(){return board;}
     public BoardSprite() {
         super(
                 BOARD_NAME,

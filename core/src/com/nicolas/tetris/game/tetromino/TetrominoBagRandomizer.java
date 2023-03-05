@@ -1,6 +1,7 @@
 package com.nicolas.tetris.game.tetromino;
 
 import com.nicolas.tetris.game.cell.CellType;
+import com.nicolas.tetris.sprites.TetrominoSprite;
 
 import java.util.*;
 
@@ -19,10 +20,10 @@ public class TetrominoBagRandomizer {
         store.addAll(bag);
     }
 
-    public CellType getNext(){
+    public TetrominoSprite getNext(){
         if (store.isEmpty()) updateStore();
         CellType next = queue.poll();
         queue.add(store.poll());
-        return next;
+        return TetrominoSprite.get(next);
     }
 }

@@ -5,18 +5,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.nicolas.tetris.manager.ResourceManager;
-import com.nicolas.tetris.manager.SpriteManager;
+import com.nicolas.tetris.manager.GameManager;
+import com.nicolas.tetris.sprites.TetrominoSprite;
 
 public class Tetris extends ApplicationAdapter {
     SpriteBatch batch;
-    SpriteManager spriteManager;
+    GameManager spriteManager;
 
 
     @Override
     public void create() {
         ResourceManager.loadData();
+        TetrominoSprite.createAll();
         batch = new SpriteBatch();
-        spriteManager = new SpriteManager();
+        spriteManager = new GameManager();
     }
 
     @Override
