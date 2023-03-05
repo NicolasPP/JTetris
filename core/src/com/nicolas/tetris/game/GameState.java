@@ -46,8 +46,10 @@ public class GameState {
                 }
             });
             cellsIndex.forEach(index -> {
-                state[(int) (index.x + directionOffset.x)][(int) (index.y + directionOffset.y)].setType(tetrominoState.getType());
-                state[(int) (index.x + directionOffset.x)][(int) (index.y + directionOffset.y)].setUpdateType(UpdateType.FALLING);
+                int row = (int) (index.x + directionOffset.x);
+                int col = (int) (index.y + directionOffset.y);
+                state[row][col].setType(tetrominoState.getType());
+                state[row][col].setUpdateType(UpdateType.FALLING);
             });
         }
     }
