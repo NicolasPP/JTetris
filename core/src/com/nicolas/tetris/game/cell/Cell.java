@@ -12,9 +12,8 @@ public class Cell {
     private UpdateType updateType;
     private Vector2 bottomLeft;
 
-    public boolean isNotEmpty(){
-        return type != CellType.EMPTY;
-    }
+    public boolean isLocked() {return updateType == UpdateType.LOCKED;}
+    public boolean isNotEmpty(){return type != CellType.EMPTY;}
 
     public boolean isNotSpawn(){
         return type != CellType.SPAWN;
