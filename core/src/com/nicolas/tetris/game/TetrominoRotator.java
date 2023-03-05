@@ -1,5 +1,9 @@
 package com.nicolas.tetris.game;
 
+import com.badlogic.gdx.math.Vector2;
+
+import static com.nicolas.tetris.config.TetrisConfig.CELL_MAP_SIZE;
+
 public class TetrominoRotator {
     public static void rotate(int[][] cellMap, RotationDirection direction){
         int size = cellMap.length;
@@ -8,6 +12,30 @@ public class TetrominoRotator {
             for(int y = x; y < size - x - 1; y++){
                 int temp = cellMap[x][y];
                 dirMethod.exec(cellMap, size, x, y, temp);
+            }
+        }
+    }
+    public static void transpose(int[][] cellMap) {
+        int size = cellMap.length;
+        for (int x = 0; x < size; x++){
+            for(int y = x; y < size; y++){
+                int temp = cellMap[x][y];
+                cellMap[x][y] = cellMap[y][x];
+                cellMap[y][x] = temp;
+            }
+        }
+    }
+
+    public static void adjustForPivot(int[][] cellMap, Vector2 pivot){
+        for(int i = 0; i < CELL_MAP_SIZE; i++){
+            for(int j = 0; j < CELL_MAP_SIZE; j++){
+                int row = (int) (pivot.x + i); int col = (int) (pivot.y + j);
+                if (cellMap[i][j] > 0){
+                    if (row < 0 || row >= CELL_MAP_SIZE || col < 0 || col >= CELL_MAP_SIZE) continue;
+                    int temp = cellMap[i][j];
+                    cellMap[i][j] = 0;
+                    cellMap[row][col] = temp;
+                }
             }
         }
     }
@@ -33,7 +61,7 @@ public class TetrominoRotator {
         }
     }
 
-    public interface DirectionMethod{
+    private interface DirectionMethod{
         void exec(int[][] cellMap, int size, int x, int y, int temp);
     }
 }
