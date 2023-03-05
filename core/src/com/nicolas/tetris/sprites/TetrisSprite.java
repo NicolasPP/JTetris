@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.nicolas.tetris.manager.ResourceManager;
+import lombok.Data;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 import static com.nicolas.tetris.config.TetrisConfig.TEXTURE_SCALE;
 import static com.nicolas.tetris.config.TetrisConfig.CELL_SIZE;
 
-
+@Data
 public abstract class TetrisSprite {
     private final TextureRegion texture;
     private final HashMap<String, TextureRegion> subTextures;
@@ -42,21 +43,5 @@ public abstract class TetrisSprite {
                         ResourceManager.get(subTextureName)
                 )
         );
-    }
-
-    public TextureRegion getTexture() {
-        return texture;
-    }
-
-    public HashMap<String, TextureRegion> getSubTextures() {
-        return subTextures;
-    }
-
-    public Vector2 getTextureSize() {
-        return textureSize;
-    }
-
-    public Vector2 getSubTextureSize() {
-        return subTextureSize;
     }
 }
