@@ -46,4 +46,5 @@ public class TetrisConfig {
     public final static int SPAWN_ROW_COUNT = 4;
     public final static int CELL_MAP_SIZE = 4;
     public final static int PIVOT_ID = 2;
+    public final static int LINES_PER_LEVEL = 10;
 }
