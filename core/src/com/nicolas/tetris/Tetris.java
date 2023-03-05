@@ -10,7 +10,7 @@ import com.nicolas.tetris.sprites.TetrominoSprite;
 
 public class Tetris extends ApplicationAdapter {
     SpriteBatch batch;
-    GameManager spriteManager;
+    GameManager gameManager;
 
 
     @Override
@@ -18,15 +18,15 @@ public class Tetris extends ApplicationAdapter {
         ResourceManager.loadData();
         TetrominoSprite.createAll();
         batch = new SpriteBatch();
-        spriteManager = new GameManager();
+        gameManager = new GameManager();
     }
 
     @Override
     public void render() {
-        spriteManager.update(Gdx.graphics.getDeltaTime());
+        gameManager.update(Gdx.graphics.getDeltaTime());
         ScreenUtils.clear(1, 0, 0, 1);
         batch.begin();
-        spriteManager.render(batch);
+        gameManager.render(batch);
         batch.end();
     }
 
