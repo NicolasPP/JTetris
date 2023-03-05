@@ -26,48 +26,13 @@ public class TetrisConfig {
     final static public String GHOST_SHAPE_S_NAME = "ghost_shape_S";
     final static public String GHOST_SHAPE_T_NAME = "ghost_shape_T";
     final static public String GHOST_SHAPE_Z_NAME = "ghost_shape_Z";
-    final static public int[][] SHAPE_I_MAP = {
-            {0, 0, 0, 0},
-            {1, 1, 1, 1},
-            {0, 0, 0, 0},
-            {0, 0, 0, 0}
-    };
-    final static public int[][] SHAPE_J_MAP = {
-            {1, 0, 0, 0},
-            {1, 1, 1, 0},
-            {0, 0, 0, 0},
-            {0, 0, 0, 0}
-    };
-    final static public int[][] SHAPE_L_MAP = {
-            {0, 0, 1, 0},
-            {1, 1, 1, 0},
-            {0, 0, 0, 0},
-            {0, 0, 0, 0}
-    };
-    final static public int[][] SHAPE_O_MAP = {
-            {0, 1, 1, 0},
-            {0, 1, 1, 0},
-            {0, 0, 0, 0},
-            {0, 0, 0, 0}
-    };
-    final static public int[][] SHAPE_S_MAP = {
-            {0, 1, 1, 0},
-            {1, 1, 0, 0},
-            {0, 0, 0, 0},
-            {0, 0, 0, 0}
-    };
-    final static public int[][] SHAPE_T_MAP = {
-            {0, 1, 0, 0},
-            {1, 1, 1, 0},
-            {0, 0, 0, 0},
-            {0, 0, 0, 0}
-    };
-    final static public int[][] SHAPE_Z_MAP = {
-            {1, 1, 0, 0},
-            {0, 1, 1, 0},
-            {0, 0, 0, 0},
-            {0, 0, 0, 0}
-    };
+    final static public int[][] SHAPE_I_MAP = {{0, 0, 0, 0}, {1, 2, 1, 1}, {0, 0, 0, 0}, {0, 0, 0, 0}};
+    final static public int[][] SHAPE_J_MAP = {{1, 0, 0, 0}, {1, 2, 1, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
+    final static public int[][] SHAPE_L_MAP = {{0, 0, 1, 0}, {1, 2, 1, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
+    final static public int[][] SHAPE_O_MAP = {{0, 1, 1, 0}, {0, 2, 1, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
+    final static public int[][] SHAPE_S_MAP = {{0, 1, 1, 0}, {1, 2, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
+    final static public int[][] SHAPE_T_MAP = {{0, 1, 0, 0}, {1, 2, 1, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
+    final static public int[][] SHAPE_Z_MAP = {{1, 1, 0, 0}, {0, 2, 1, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
     final static public float TEXTURE_SCALE = 0.5f;
     final static public int WINDOW_WIDTH = 512;
     final static public int WINDOW_HEIGHT = 704;
@@ -79,4 +44,6 @@ public class TetrisConfig {
     public final static int SPAWN_ROW = 23;
     public final static int SPAWN_COl = 3;
     public final static int SPAWN_ROW_COUNT = 4;
+    public final static int CELL_MAP_SIZE = 4;
+    public final static int PIVOT_ID = 2;
 }
