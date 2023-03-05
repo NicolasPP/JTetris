@@ -14,11 +14,11 @@ import static com.nicolas.tetris.config.TetrisConfig.*;
 public class GameState {
     private final Cell[][] state;
     private TetrominoState tetrominoState;
-    private boolean canSpawn;
+    private boolean spawnUnlocked;
 
     public GameState() {
         state = new Cell[GRID_ROWS][GRID_COLS];
-        canSpawn = true;
+        spawnUnlocked = true;
         init();
     }
 
@@ -31,7 +31,7 @@ public class GameState {
         if (isFallingCollided(cellsIndex, directionOffset)) {
             if (direction == ShiftDirection.DOWN) {
                 cellsIndex.forEach(index -> state[(int) index.x][(int) index.y].setUpdateType(UpdateType.LOCKED));
-                canSpawn = true;
+                spawnUnlocked = true;
             }
         } else {
             tetrominoState.getPos().x += directionOffset.x;
@@ -88,7 +88,7 @@ public class GameState {
 
     public void spawnTetromino(TetrominoSprite nextTetromino) {
         tetrominoState = nextTetromino.getNewState();
-        canSpawn = false;
+        spawnUnlocked = false;
         IntStream.range(0, CELL_MAP_SIZE).forEach(row -> IntStream.range(0, CELL_MAP_SIZE).forEach(col -> {
             if (nextTetromino.getCellMap()[row][col] > 0) {
                 state[SPAWN_ROW - row][SPAWN_COl + col].setType(nextTetromino.getCellType());
