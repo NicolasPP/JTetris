@@ -12,7 +12,15 @@ public class Cell {
     private UpdateType updateType;
     private Vector2 bottomLeft;
 
-    public boolean isCellTypeNotEmpty(){
+    public boolean isNotEmpty(){
         return type != CellType.EMPTY;
+    }
+
+    public boolean isNotSpawn(){
+        return type != CellType.SPAWN;
+    }
+
+    public boolean isFalling(){
+        return updateType == UpdateType.FALLING;
     }
 }

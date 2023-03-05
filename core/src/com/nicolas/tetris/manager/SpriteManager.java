@@ -5,10 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.nicolas.tetris.game.Cell;
-import com.nicolas.tetris.game.CellType;
-import com.nicolas.tetris.game.GameState;
-import com.nicolas.tetris.game.UpdateType;
+import com.nicolas.tetris.game.*;
 import com.nicolas.tetris.sprites.BoardSprite;
 import com.nicolas.tetris.sprites.TetrominoSprite;
 
@@ -63,8 +60,8 @@ public class SpriteManager implements InputProcessor {
     public SpriteManager() {
         board = new BoardSprite();
         tetrominos = new HashMap<>();
-        gameState = new GameState(new Vector2(0, 0));
-        level = 1;
+        gameState = new GameState();
+        level = 8;
         init();
     }
 
@@ -81,10 +78,10 @@ public class SpriteManager implements InputProcessor {
     }
 
     public void render(SpriteBatch batch) {
-        board.render(batch, gameState.getBoardPos());
+        board.render(batch, new Vector2(0, 0));
 
         Arrays.stream(gameState.getState()).forEach(
-                row -> Arrays.stream(row).filter(Cell::isCellTypeNotEmpty).forEach(
+                row -> Arrays.stream(row).filter(Cell::isNotEmpty).filter(Cell::isNotSpawn).forEach(
                         cell -> tetrominos.get(cell.getType()).renderSquare(batch, cell.getBottomLeft())));
 
     }
@@ -92,11 +89,10 @@ public class SpriteManager implements InputProcessor {
     public void update(float dt) {
         accumulator += dt;
         if (accumulator >= getTimePerCell()) {
-            if (gameState.getCanSpawn()) {
-                gameState.queueTetrominoSpawn(getRandomTetromino());
+            if (gameState.isCanSpawn()) {
+                gameState.spawnTetromino(getRandomTetromino());
             }
-            gameState.shift(GameState.ShiftDirection.DOWN, UpdateType.FALLING);
-            gameState.spawn();
+            gameState.shift(ShiftDirection.DOWN, UpdateType.FALLING);
             accumulator = 0f;
         }
     }
@@ -108,20 +104,25 @@ public class SpriteManager implements InputProcessor {
         return tetrominos.get(keyArr[randomIndex]);
     }
 
-    private float getTimePerCell() {
-        return (float) Math.pow(0.8f - ((level - 1) * 0.007f), level - 1);
-    }
+    private float getTimePerCell() {return (float) Math.pow(0.8f - ((level - 1) * 0.007f), level - 1);}
 
     @Override
     public boolean keyDown(int i) {
         switch (i) {
             case Input.Keys.RIGHT:
-                gameState.shift(GameState.ShiftDirection.RIGHT, UpdateType.FALLING);
+                gameState.shift(ShiftDirection.RIGHT, UpdateType.FALLING);
                 break;
             case Input.Keys.LEFT:
-                gameState.shift(GameState.ShiftDirection.LEFT, UpdateType.FALLING);
+                gameState.shift(ShiftDirection.LEFT, UpdateType.FALLING);
                 break;
-
+            case Input.Keys.A:
+                gameState.rotate(RotationDirection.ANTICLOCKWISE);
+                break;
+            case Input.Keys.S:
+                gameState.rotate(RotationDirection.CLOCKWISE);
+                break;
+            case Input.Keys.SPACE:
+                gameState.shift(ShiftDirection.DOWN, UpdateType.FALLING);
         }
         return false;
     }
@@ -138,6 +139,7 @@ public class SpriteManager implements InputProcessor {
 
     @Override
     public boolean touchDown(int i, int i1, int i2, int i3) {
+        gameState.print();
         return false;
     }
 
