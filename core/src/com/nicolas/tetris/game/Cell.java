@@ -19,4 +19,8 @@ public class Cell {
     public boolean isNotSpawn(){
         return type != CellType.SPAWN;
     }
+
+    public boolean isFalling(){
+        return updateType == UpdateType.FALLING;
+    }
 }
