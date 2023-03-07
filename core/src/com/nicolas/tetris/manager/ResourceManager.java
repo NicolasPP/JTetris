@@ -12,9 +12,9 @@ import static com.nicolas.tetris.config.TetrisConfig.*;
 public class ResourceManager {
     private static TextureAtlas texturesAtlas;
     private static BitmapFont font;
-    public static void loadData() {
+    public static void loadData(String fontFile) {
         texturesAtlas = new TextureAtlas(SPRITE_TXT_FILE);
-        font = generateFont(PIXEL_FONT_TTF);
+        font = generateFont(fontFile);
     }
 
     public static BitmapFont getFont() {return font;}
