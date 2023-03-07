@@ -45,6 +45,17 @@ public class TetrisConfig {
     public final static int SPAWN_COl = 3;
     public final static int SPAWN_ROW_COUNT = 4;
     public final static int CELL_MAP_SIZE = 4;
+    public final static int SCORE_UI_WIDTH = 4;
+    public final static int SCORE_UI_HEIGHT = 6;
+
+    public final static int STATS_UI_WIDTH = 4;
+    public final static int STATS_UI_HEIGHT = 18;
+
+    public final static int SPAWN_QUEUE_UI_WIDTH = 4;
+    public final static int SPAWN_QUEUE_UI_HEIGHT = 18;
+
+    public final static int HOLD_UI_WIDTH = 4;
+    public final static int HOLD_UI_HEIGHT = 6;
     public final static int PIVOT_ID = 2;
     public final static int LINES_PER_LEVEL = 10;
     public final static String SPRITE_TXT_FILE = "sprites.txt";
