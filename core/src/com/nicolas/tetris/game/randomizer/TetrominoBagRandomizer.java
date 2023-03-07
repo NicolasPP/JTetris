@@ -1,4 +1,4 @@
-package com.nicolas.tetris.game.tetromino;
+package com.nicolas.tetris.game.randomizer;
 
 import com.nicolas.tetris.game.cell.CellType;
 import com.nicolas.tetris.sprites.TetrominoSprite;

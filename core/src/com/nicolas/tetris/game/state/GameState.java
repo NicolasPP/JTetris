@@ -1,10 +1,9 @@
-package com.nicolas.tetris.game;
+package com.nicolas.tetris.game.state;
 
 import com.nicolas.tetris.game.cell.Cell;
 import com.nicolas.tetris.game.cell.CellType;
 import com.nicolas.tetris.game.cell.UpdateType;
 import com.nicolas.tetris.utils.RotationDirection;
-import com.nicolas.tetris.game.tetromino.TetrominoState;
 import com.nicolas.tetris.sprites.TetrominoSprite;
 import com.nicolas.tetris.utils.Pos;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.nicolas.tetris.game;
+package com.nicolas.tetris.game.state;
 
 import com.nicolas.tetris.utils.Pos;
 

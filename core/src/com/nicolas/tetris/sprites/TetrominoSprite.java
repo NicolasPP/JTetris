@@ -2,7 +2,7 @@ package com.nicolas.tetris.sprites;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nicolas.tetris.game.cell.CellType;
-import com.nicolas.tetris.game.tetromino.TetrominoState;
+import com.nicolas.tetris.game.state.TetrominoState;
 import com.nicolas.tetris.utils.Pos;
 
 import java.util.Arrays;
