@@ -24,7 +24,6 @@ public class GameManager implements InputProcessor {
     private int score = 0;
     private int totalLinesCleared = 0;
     private float accumulator = 0f;
-
     private final BoardSprite board = BoardSprite.getInstance();
 
     public GameManager() {

@@ -4,7 +4,6 @@ import com.nicolas.tetris.game.cell.Cell;
 import com.nicolas.tetris.game.cell.CellType;
 import com.nicolas.tetris.game.cell.UpdateType;
 import com.nicolas.tetris.game.tetromino.RotationDirection;
-import com.nicolas.tetris.game.tetromino.TetrominoRotator;
 import com.nicolas.tetris.game.tetromino.TetrominoState;
 import com.nicolas.tetris.sprites.TetrominoSprite;
 import com.nicolas.tetris.utils.Pos;
@@ -30,7 +29,7 @@ public class GameState {
     public void shift(ShiftDirection direction, UpdateType updateType) {
         if (tetrominoState == null) return;
 
-        Pos directionOffset = getDirectionOffset(direction);
+        Pos directionOffset = direction.getDirectionOffset();
         List<Pos> cellsIndex = getCellsIndexByUpdateType(updateType);
 
         CellType[][] types = new CellType[GRID_ROWS][GRID_COLS];
@@ -51,12 +50,11 @@ public class GameState {
             }
             cellsIndex.forEach(index -> {
                 types[index.getRow()][index.getCol()] = state[index.getRow()][index.getCol()].getType();
+                Cell cell = state[index.getRow()][index.getCol()];
                 if (index.getRow() >= GRID_ROWS - SPAWN_ROW_COUNT) {
-                    state[index.getRow()][index.getCol()].setType(CellType.SPAWN);
-                    state[index.getRow()][index.getCol()].setUpdateType(UpdateType.SKIP);
+                    cell.setType(CellType.SPAWN); cell.setUpdateType(UpdateType.SKIP);
                 } else {
-                    state[index.getRow()][index.getCol()].setType(CellType.EMPTY);
-                    state[index.getRow()][index.getCol()].setUpdateType(UpdateType.SKIP);
+                    cell.setType(CellType.EMPTY); cell.setUpdateType(UpdateType.SKIP);
                 }
             });
 
@@ -70,21 +68,7 @@ public class GameState {
     }
 
     public void rotate(RotationDirection direction) {
-        if (tetrominoState.getType() == CellType.O) return;
-
-        Pos pivotOffset = getPivotIndex(tetrominoState.getCellMap());
-
-        if (tetrominoState.getType() == CellType.I) {
-            TetrominoRotator.transpose(tetrominoState.getCellMap());
-        } else {
-            TetrominoRotator.rotate(tetrominoState.getCellMap(), direction);
-        }
-
-        Pos afterPivotOffset = getPivotIndex(tetrominoState.getCellMap());
-
-        pivotOffset.decrement(afterPivotOffset);
-
-        TetrominoRotator.adjustForPivot(tetrominoState.getCellMap(), pivotOffset);
+        tetrominoState.rotate(direction);
 
         if (!isRotateSafe()) return;
 
@@ -95,8 +79,9 @@ public class GameState {
 
         IntStream.range(0, CELL_MAP_SIZE).forEach(row -> IntStream.range(0, CELL_MAP_SIZE).forEach(col -> {
             if (tetrominoState.getCellMap()[row][col] > 0) {
-                state[tetrominoState.getPos().getRow() - row][tetrominoState.getPos().getCol() + col].setType(tetrominoState.getType());
-                state[tetrominoState.getPos().getRow() - row][tetrominoState.getPos().getCol() + col].setUpdateType(UpdateType.FALLING);
+                Cell nextCell = state[tetrominoState.getPos().getRow() - row][tetrominoState.getPos().getCol() + col];
+                nextCell.setType(tetrominoState.getType());
+                nextCell.setUpdateType(UpdateType.FALLING);
             }
         }));
     }
@@ -194,16 +179,6 @@ public class GameState {
         }));
         return filteredIndexes;
     }
-
-    private Pos getPivotIndex(int[][] cellMap) {
-        for (int row = 0; row < cellMap.length; row++) {
-            for (int col = 0; col < cellMap[row].length; col++) {
-                if (cellMap[row][col] == PIVOT_ID) return new Pos(row, col);
-            }
-        }
-        return new Pos(0, 0);
-    }
-
     private boolean isCollided(List<Pos> cellsIndex, Pos directionOffset) {
         for (Pos index : cellsIndex) {
             int row = index.getRow() + directionOffset.getRow();
@@ -212,17 +187,5 @@ public class GameState {
                     || state[row][col].getUpdateType() == UpdateType.LOCKED) return true;
         }
         return false;
-    }
-
-    public static Pos getDirectionOffset(ShiftDirection direction) {
-        switch (direction) {
-            case DOWN:
-                return new Pos(-1, 0);
-            case RIGHT:
-                return new Pos(0, 1);
-            case LEFT:
-                return new Pos(0, -1);
-        }
-        return new Pos(0, 0);
     }
 }
