@@ -1,6 +1,5 @@
 package com.nicolas.tetris.sprites;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nicolas.tetris.game.cell.CellType;
 import com.nicolas.tetris.game.state.TetrominoState;
 import com.nicolas.tetris.utils.Pos;
@@ -83,17 +82,11 @@ public class TetrominoSprite extends TetrisSprite {
         cellType = type;
     }
 
-    public void renderSquare(SpriteBatch batch, Pos position) {
-        if (position.getRow() < 0 || position.getCol() < 0) {
-            return;
-        }
-        batch.draw(getSubTextures().get(colorName),
-                position.getRow(), position.getCol(),
-                getSubTextureSize().x, getSubTextureSize().y);
-    }
-
     public int[][] getCellMap() {
         return cellMap;
+    }
+    public String getColorName() {
+        return colorName;
     }
 
     public int[][] getCellMapClone() {
