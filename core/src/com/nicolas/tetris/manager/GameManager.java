@@ -15,16 +15,12 @@ import com.nicolas.tetris.utils.Pos;
 
 import java.util.Arrays;
 
-import static com.nicolas.tetris.config.TetrisConfig.LINES_PER_LEVEL;
-
 public class GameManager implements InputProcessor {
     private final GameState gameState = new GameState();
     private final TetrominoBagRandomizer bagRandomizer = new TetrominoBagRandomizer();
-    private int level = 0;
-    private int score = 0;
-    private int totalLinesCleared = 0;
-    private float accumulator = 0f;
+    private final LevelManager levelMan = new LevelManager();
     private final BoardSprite board = BoardSprite.getInstance();
+    private float accumulator = 0f;
 
     public GameManager() {
         Gdx.input.setInputProcessor(this);
@@ -40,36 +36,14 @@ public class GameManager implements InputProcessor {
 
     public void update(float dt) {
         accumulator += dt;
-        if (accumulator >= getTimePerCell()) {
+        if (accumulator >= levelMan.getTimePerCell()) {
             if (gameState.isSpawnUnlocked())
                 gameState.spawnTetromino(bagRandomizer.getNext());
             gameState.shift(ShiftDirection.DOWN, UpdateType.FALLING);
-            processClearedLines(gameState.processFilledLines());
+            levelMan.processClearedLines(gameState.processFilledLines());
             gameState.shift(ShiftDirection.DOWN, UpdateType.LOCK_FALL);
             accumulator = 0f;
         }
-    }
-
-    private void processClearedLines(int linesCleared){
-        totalLinesCleared += linesCleared;
-        level = calculateLevel();
-        score += calculateScore(linesCleared);
-    }
-
-    private int calculateScore(int linesCleared){
-        switch (linesCleared){
-            case 1: return 40 * (level + 1);
-            case 2: return 100 * (level + 1);
-            case 3: return 300 * (level + 1);
-            case 4: return 1200 * (level + 1);
-        }
-        return 0;
-    }
-    private int calculateLevel(){
-        return Math.floorDiv(totalLinesCleared, LINES_PER_LEVEL);
-    }
-    private float getTimePerCell() {
-        return (float) Math.pow(0.8f - ((level - 1) * 0.007f), level - 1);
     }
 
     @Override
@@ -106,7 +80,7 @@ public class GameManager implements InputProcessor {
     @Override
     public boolean touchDown(int i, int i1, int i2, int i3) {
         gameState.print();
-        System.out.println(score);
+        System.out.println(levelMan.getScore());
         return false;
     }
 
