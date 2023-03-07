@@ -21,7 +21,7 @@ public abstract class TetrisSprite {
 
 
     public TetrisSprite(String textureName, List<String> subTextureNames) {
-        this.texture = ResourceManager.get(textureName);
+        this.texture = ResourceManager.getTexture(textureName);
         this.subTextures = new HashMap<>();
         this.textureSize = new Vector2(
                 TEXTURE_SCALE * texture.getRegionWidth(),
@@ -40,7 +40,7 @@ public abstract class TetrisSprite {
         subTextureNames.forEach(subTextureName ->
                 subTextures.put(
                         subTextureName,
-                        ResourceManager.get(subTextureName)
+                        ResourceManager.getTexture(subTextureName)
                 )
         );
     }
