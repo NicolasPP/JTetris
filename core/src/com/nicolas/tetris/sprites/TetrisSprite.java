@@ -33,8 +33,14 @@ public abstract class TetrisSprite {
         init(subTextureNames);
     }
 
-    public void render(SpriteBatch batch, Pos position) {
-        batch.draw(getTexture(), position.getRow(), position.getCol(), getTextureSize().x, getTextureSize().y);
+    public void renderTexture(SpriteBatch batch, Pos position) {
+        batch.draw(getTexture(), position.getCol(), position.getRow(), getTextureSize().x, getTextureSize().y);
+    }
+
+    public void renderSubTexture(SpriteBatch batch, String subTextureName, Pos position) {
+        TextureRegion subTexture = getSubTextures().get(subTextureName);
+        if (subTexture == null) return;
+        batch.draw(subTexture, position.getCol(), position.getRow(), getSubTextureSize().x, getSubTextureSize().y);
     }
 
     private void init(List<String> subTextureNames) {

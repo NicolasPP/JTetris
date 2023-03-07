@@ -146,7 +146,7 @@ public class GameState {
     private void init(Pos boardPos) {
         int cellSize = (int) (CELL_SIZE * TEXTURE_SCALE);
         IntStream.range(0, GRID_ROWS).forEach(row -> IntStream.range(0, GRID_COLS).forEach(col -> {
-            Pos pos = new Pos(((col + 1) * cellSize) + boardPos.getRow(), ((row + 1) * cellSize) + boardPos.getCol());
+            Pos pos = new Pos(((row + 1) * cellSize) + boardPos.getRow(), ((col + 1) * cellSize) + boardPos.getCol());
             state[row][col] = Cell.builder().type(CellType.EMPTY).updateType(UpdateType.SKIP).bottomLeft(pos).build();
             if (row >= GRID_ROWS - SPAWN_ROW_COUNT) {
                 state[row][col].setType(CellType.SPAWN);
