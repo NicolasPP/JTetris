@@ -1,4 +1,4 @@
-package com.nicolas.tetris.game.tetromino;
+package com.nicolas.tetris.utils;
 
 public enum RotationDirection {
     CLOCKWISE, ANTICLOCKWISE

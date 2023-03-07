@@ -1,7 +1,8 @@
-package com.nicolas.tetris.game.tetromino;
+package com.nicolas.tetris.utils;
 
-public class TetrominoRotator {
-    public static void rotate(int[][] cellMap, RotationDirection direction) {
+public class Rotate2DArray {
+
+    public static void rotate90(int[][] cellMap, RotationDirection direction) {
         int size = cellMap.length;
         DirectionMethod dirMethod = getDirectionMethod(direction);
         for (int x = 0; x < Math.floorDiv(size, 2); x++) {
@@ -39,9 +40,9 @@ public class TetrominoRotator {
 
     private static DirectionMethod getDirectionMethod(RotationDirection direction) {
         if (direction == RotationDirection.CLOCKWISE) {
-            return TetrominoRotator::rotateClockWise;
+            return Rotate2DArray::rotateClockWise;
         } else {
-            return TetrominoRotator::rotateAntiClockWise;
+            return Rotate2DArray::rotateAntiClockWise;
         }
     }
 

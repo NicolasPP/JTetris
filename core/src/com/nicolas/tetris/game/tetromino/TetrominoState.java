@@ -2,6 +2,8 @@ package com.nicolas.tetris.game.tetromino;
 
 import com.nicolas.tetris.game.cell.CellType;
 import com.nicolas.tetris.utils.Pos;
+import com.nicolas.tetris.utils.Rotate2DArray;
+import com.nicolas.tetris.utils.RotationDirection;
 import lombok.Builder;
 import lombok.Data;
 
@@ -23,9 +25,9 @@ public class TetrominoState {
         Pos pivotOffset = getPivotIndex();
 
         if (type == CellType.I) {
-            TetrominoRotator.transpose(cellMap);
+            Rotate2DArray.transpose(cellMap);
         } else {
-            TetrominoRotator.rotate(cellMap, direction);
+            Rotate2DArray.rotate90(cellMap, direction);
         }
 
         Pos afterPivotOffset = getPivotIndex();

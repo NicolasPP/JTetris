@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nicolas.tetris.game.*;
 import com.nicolas.tetris.game.cell.Cell;
 import com.nicolas.tetris.game.cell.UpdateType;
-import com.nicolas.tetris.game.tetromino.RotationDirection;
+import com.nicolas.tetris.utils.RotationDirection;
 import com.nicolas.tetris.game.tetromino.TetrominoBagRandomizer;
 import com.nicolas.tetris.sprites.BoardSprite;
 import com.nicolas.tetris.sprites.TetrominoSprite;
