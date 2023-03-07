@@ -17,18 +17,20 @@ import com.nicolas.tetris.utils.Pos;
 import java.util.Arrays;
 
 public class GameManager implements InputProcessor {
-    private final GameState gameState = new GameState();
+    private final GameState gameState;
     private final SpriteBagRand bagRandomizer = new SpriteBagRand();
     private final LevelManager levelMan = new LevelManager();
     private final BoardSprite board = BoardSprite.getInstance();
+    private final Pos boardPos = new Pos(30 , 0);
     private float accumulator = 0f;
 
     public GameManager() {
+        gameState = new GameState(boardPos);
         Gdx.input.setInputProcessor(this);
     }
 
     public void render(SpriteBatch batch) {
-        board.render(batch, new Pos(0, 0));
+        board.render(batch, boardPos);
 
         Arrays.stream(gameState.getState()).forEach(
                 row -> Arrays.stream(row).filter(Cell::isNotEmpty).filter(Cell::isNotSpawn).forEach(
