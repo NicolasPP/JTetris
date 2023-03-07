@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.nicolas.tetris.game.*;
 import com.nicolas.tetris.game.cell.Cell;
 import com.nicolas.tetris.game.cell.UpdateType;
@@ -12,6 +11,7 @@ import com.nicolas.tetris.game.tetromino.RotationDirection;
 import com.nicolas.tetris.game.tetromino.TetrominoBagRandomizer;
 import com.nicolas.tetris.sprites.BoardSprite;
 import com.nicolas.tetris.sprites.TetrominoSprite;
+import com.nicolas.tetris.utils.Pos;
 
 import java.util.Arrays;
 
@@ -25,12 +25,14 @@ public class GameManager implements InputProcessor {
     private int totalLinesCleared = 0;
     private float accumulator = 0f;
 
+    private final BoardSprite board = BoardSprite.getInstance();
+
     public GameManager() {
         Gdx.input.setInputProcessor(this);
     }
 
     public void render(SpriteBatch batch) {
-        BoardSprite.get().render(batch, new Vector2(0, 0));
+        board.render(batch, new Pos(0, 0));
 
         Arrays.stream(gameState.getState()).forEach(
                 row -> Arrays.stream(row).filter(Cell::isNotEmpty).filter(Cell::isNotSpawn).forEach(

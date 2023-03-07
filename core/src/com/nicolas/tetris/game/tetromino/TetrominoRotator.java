@@ -1,6 +1,6 @@
 package com.nicolas.tetris.game.tetromino;
 
-import com.badlogic.gdx.math.Vector2;
+import com.nicolas.tetris.utils.Pos;
 
 import static com.nicolas.tetris.config.TetrisConfig.CELL_MAP_SIZE;
 
@@ -26,10 +26,10 @@ public class TetrominoRotator {
         }
     }
 
-    public static void adjustForPivot(int[][] cellMap, Vector2 pivot){
+    public static void adjustForPivot(int[][] cellMap, Pos pivot){
         for(int i = 0; i < CELL_MAP_SIZE; i++){
             for(int j = 0; j < CELL_MAP_SIZE; j++){
-                int row = (int) (pivot.x + i); int col = (int) (pivot.y + j);
+                int row = pivot.getRow() + i; int col = pivot.getCol() + j;
                 if (cellMap[i][j] > 0){
                     if (row < 0 || row >= CELL_MAP_SIZE || col < 0 || col >= CELL_MAP_SIZE) continue;
                     int temp = cellMap[i][j];

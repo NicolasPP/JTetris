@@ -1,9 +1,9 @@
 package com.nicolas.tetris.sprites;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.nicolas.tetris.game.cell.CellType;
 import com.nicolas.tetris.game.tetromino.TetrominoState;
+import com.nicolas.tetris.utils.Pos;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -46,7 +46,7 @@ import static com.nicolas.tetris.config.TetrisConfig.SPAWN_COl;
 
 
 public class TetrominoSprite extends TetrisSprite {
-    private static final HashMap<CellType, TetrominoSprite> tetrominos = new HashMap<>();
+    private static HashMap<CellType, TetrominoSprite> tetrominos;
     private final String ghostName;
     private final String colorName;
     private final CellType cellType;
@@ -54,6 +54,7 @@ public class TetrominoSprite extends TetrisSprite {
     final int[][] cellMap;
 
     public static void createAll() {
+        tetrominos = new HashMap<>();
         tetrominos.put(CellType.I, new TetrominoSprite(CellType.I, SHAPE_I_NAME, GHOST_SHAPE_I_NAME, LIGHT_BLUE, SHAPE_I_MAP));
         tetrominos.put(CellType.J, new TetrominoSprite(CellType.J, SHAPE_J_NAME, GHOST_SHAPE_J_NAME, BLUE, SHAPE_J_MAP));
         tetrominos.put(CellType.L, new TetrominoSprite(CellType.L, SHAPE_L_NAME, GHOST_SHAPE_L_NAME, ORANGE, SHAPE_L_MAP));
@@ -68,7 +69,7 @@ public class TetrominoSprite extends TetrisSprite {
     }
 
 
-    public TetrominoSprite(
+    private TetrominoSprite(
             CellType type,
             String textureName,
             String ghostTextureName,
@@ -82,11 +83,13 @@ public class TetrominoSprite extends TetrisSprite {
         cellType = type;
     }
 
-    public void renderSquare(SpriteBatch batch, Vector2 position) {
-        if (position.x < 0 || position.y < 0) {
+    public void renderSquare(SpriteBatch batch, Pos position) {
+        if (position.getRow() < 0 || position.getCol() < 0) {
             return;
         }
-        batch.draw(getSubTextures().get(colorName), position.x, position.y, getSubTextureSize().x, getSubTextureSize().y);
+        batch.draw(getSubTextures().get(colorName),
+                position.getRow(), position.getCol(),
+                getSubTextureSize().x, getSubTextureSize().y);
     }
 
     public int[][] getCellMap() {
@@ -108,7 +111,7 @@ public class TetrominoSprite extends TetrisSprite {
         return TetrominoState.builder()
                 .cellMap(getCellMapClone())
                 .type(cellType)
-                .pos(new Vector2(SPAWN_ROW, SPAWN_COl))
+                .pos(new Pos(SPAWN_ROW, SPAWN_COl))
                 .build();
     }
 }

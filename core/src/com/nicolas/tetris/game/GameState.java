@@ -1,6 +1,5 @@
 package com.nicolas.tetris.game;
 
-import com.badlogic.gdx.math.Vector2;
 import com.nicolas.tetris.game.cell.Cell;
 import com.nicolas.tetris.game.cell.CellType;
 import com.nicolas.tetris.game.cell.UpdateType;
@@ -8,6 +7,7 @@ import com.nicolas.tetris.game.tetromino.RotationDirection;
 import com.nicolas.tetris.game.tetromino.TetrominoRotator;
 import com.nicolas.tetris.game.tetromino.TetrominoState;
 import com.nicolas.tetris.sprites.TetrominoSprite;
+import com.nicolas.tetris.utils.Pos;
 import lombok.Data;
 
 import java.util.*;
@@ -30,8 +30,8 @@ public class GameState {
     public void shift(ShiftDirection direction, UpdateType updateType) {
         if (tetrominoState == null) return;
 
-        Vector2 directionOffset = getDirectionOffset(direction);
-        List<Vector2> cellsIndex = getCellsIndexByUpdateType(updateType);
+        Pos directionOffset = getDirectionOffset(direction);
+        List<Pos> cellsIndex = getCellsIndexByUpdateType(updateType);
 
         CellType[][] types = new CellType[GRID_ROWS][GRID_COLS];
         for (CellType[] row : types) Arrays.fill(row, CellType.EMPTY);
@@ -41,31 +41,30 @@ public class GameState {
         if (isCollided) {
             if (direction == ShiftDirection.DOWN) {
                 if(updateType == UpdateType.FALLING || updateType == UpdateType.LOCK_FALL){
-                    cellsIndex.forEach(index -> state[(int) index.x][(int) index.y].setUpdateType(UpdateType.LOCKED));
+                    cellsIndex.forEach(index -> state[index.getRow()][index.getCol()].setUpdateType(UpdateType.LOCKED));
                 }
                 if(updateType == UpdateType.FALLING) spawnUnlocked = true;
             }
         } else {
             if (updateType == UpdateType.FALLING) {
-                tetrominoState.getPos().x += directionOffset.x;
-                tetrominoState.getPos().y += directionOffset.y;
+                tetrominoState.getPos().increment(directionOffset);
             }
             cellsIndex.forEach(index -> {
-                types[(int) index.x][(int) index.y] = state[(int) index.x][(int) index.y].getType();
-                if (index.x >= GRID_ROWS - SPAWN_ROW_COUNT) {
-                    state[(int) index.x][(int) index.y].setType(CellType.SPAWN);
-                    state[(int) index.x][(int) index.y].setUpdateType(UpdateType.SKIP);
+                types[index.getRow()][index.getCol()] = state[index.getRow()][index.getCol()].getType();
+                if (index.getRow() >= GRID_ROWS - SPAWN_ROW_COUNT) {
+                    state[index.getRow()][index.getCol()].setType(CellType.SPAWN);
+                    state[index.getRow()][index.getCol()].setUpdateType(UpdateType.SKIP);
                 } else {
-                    state[(int) index.x][(int) index.y].setType(CellType.EMPTY);
-                    state[(int) index.x][(int) index.y].setUpdateType(UpdateType.SKIP);
+                    state[index.getRow()][index.getCol()].setType(CellType.EMPTY);
+                    state[index.getRow()][index.getCol()].setUpdateType(UpdateType.SKIP);
                 }
             });
 
             cellsIndex.forEach(index -> {
-                int row = (int) (index.x + directionOffset.x);
-                int col = (int) (index.y + directionOffset.y);
-                state[row][col].setType(types[(int) index.x][(int) index.y]);
-                state[row][col].setUpdateType(updateType);
+                CellType type = types[index.getRow()][index.getCol()];
+                index.increment(directionOffset);
+                state[index.getRow()][index.getCol()].setType(type);
+                state[index.getRow()][index.getCol()].setUpdateType(updateType);
             });
         }
     }
@@ -73,7 +72,7 @@ public class GameState {
     public void rotate(RotationDirection direction) {
         if (tetrominoState.getType() == CellType.O) return;
 
-        Vector2 beforePivotIndex = getPivotIndex(tetrominoState.getCellMap());
+        Pos pivotOffset = getPivotIndex(tetrominoState.getCellMap());
 
         if (tetrominoState.getType() == CellType.I) {
             TetrominoRotator.transpose(tetrominoState.getCellMap());
@@ -81,9 +80,9 @@ public class GameState {
             TetrominoRotator.rotate(tetrominoState.getCellMap(), direction);
         }
 
-        Vector2 afterPivotIndex = getPivotIndex(tetrominoState.getCellMap());
+        Pos afterPivotOffset = getPivotIndex(tetrominoState.getCellMap());
 
-        Vector2 pivotOffset = new Vector2((beforePivotIndex.x - afterPivotIndex.x), (beforePivotIndex.y - afterPivotIndex.y));
+        pivotOffset.decrement(afterPivotOffset);
 
         TetrominoRotator.adjustForPivot(tetrominoState.getCellMap(), pivotOffset);
 
@@ -96,8 +95,8 @@ public class GameState {
 
         IntStream.range(0, CELL_MAP_SIZE).forEach(row -> IntStream.range(0, CELL_MAP_SIZE).forEach(col -> {
             if (tetrominoState.getCellMap()[row][col] > 0) {
-                state[(int) tetrominoState.getPos().x - row][(int) tetrominoState.getPos().y + col].setType(tetrominoState.getType());
-                state[(int) tetrominoState.getPos().x - row][(int) tetrominoState.getPos().y + col].setUpdateType(UpdateType.FALLING);
+                state[tetrominoState.getPos().getRow() - row][tetrominoState.getPos().getCol() + col].setType(tetrominoState.getType());
+                state[tetrominoState.getPos().getRow() - row][tetrominoState.getPos().getCol() + col].setUpdateType(UpdateType.FALLING);
             }
         }));
     }
@@ -161,15 +160,14 @@ public class GameState {
     }
 
     private void init() {
-        float cellSize = CELL_SIZE * TEXTURE_SCALE;
-        Vector2 spawnPos = new Vector2(-1, -1);
+        int cellSize = (int) (CELL_SIZE * TEXTURE_SCALE);
         IntStream.range(0, GRID_ROWS).forEach(row -> IntStream.range(0, GRID_COLS).forEach(col -> {
-            Vector2 pos = new Vector2((col + 1) * cellSize, (row + 1) * cellSize);
+            Pos pos = new Pos((col + 1) * cellSize, (row + 1) * cellSize);
             state[row][col] = Cell.builder().type(CellType.EMPTY).updateType(UpdateType.SKIP).bottomLeft(pos).build();
             if (row >= GRID_ROWS - SPAWN_ROW_COUNT) {
                 state[row][col].setType(CellType.SPAWN);
                 state[row][col].setUpdateType(UpdateType.SKIP);
-                state[row][col].setBottomLeft(spawnPos);
+                state[row][col].setBottomLeft(new Pos(-1, -1));
             }
         }));
     }
@@ -177,8 +175,8 @@ public class GameState {
     private boolean isRotateSafe() {
         for (int row = 0; row < CELL_MAP_SIZE; row++) {
             for (int col = 0; col < CELL_MAP_SIZE; col++) {
-                int nextRow = (int) (tetrominoState.getPos().x - row);
-                int nextCol = (int) (tetrominoState.getPos().y + col);
+                int nextRow = tetrominoState.getPos().getRow() - row;
+                int nextCol = tetrominoState.getPos().getCol() + col;
                 if (tetrominoState.getCellMap()[row][col] == 0) continue;
                 if (nextRow >= GRID_ROWS || nextRow < 0 || nextCol >= GRID_COLS || nextCol < 0) return false;
                 if (state[nextRow][nextCol].getUpdateType() == UpdateType.LOCKED) return false;
@@ -187,44 +185,44 @@ public class GameState {
         return true;
     }
 
-    private List<Vector2> getCellsIndexByUpdateType(UpdateType updateType) {
-        List<Vector2> filteredIndexes = new ArrayList<>();
+    private List<Pos> getCellsIndexByUpdateType(UpdateType updateType) {
+        List<Pos> filteredIndexes = new ArrayList<>();
         IntStream.range(0, GRID_ROWS).forEach(row -> IntStream.range(0, GRID_COLS).forEach(col -> {
             if (state[row][col].getUpdateType() == updateType) {
-                filteredIndexes.add(new Vector2(row, col));
+                filteredIndexes.add(new Pos(row, col));
             }
         }));
         return filteredIndexes;
     }
 
-    private Vector2 getPivotIndex(int[][] cellMap) {
+    private Pos getPivotIndex(int[][] cellMap) {
         for (int row = 0; row < cellMap.length; row++) {
             for (int col = 0; col < cellMap[row].length; col++) {
-                if (cellMap[row][col] == PIVOT_ID) return new Vector2(row, col);
+                if (cellMap[row][col] == PIVOT_ID) return new Pos(row, col);
             }
         }
-        return new Vector2(0, 0);
+        return new Pos(0, 0);
     }
 
-    private boolean isCollided(List<Vector2> cellsIndex, Vector2 directionOffset) {
-        for (Vector2 index : cellsIndex) {
-            int row = (int) (index.x + directionOffset.x);
-            int col = (int) (index.y + directionOffset.y);
+    private boolean isCollided(List<Pos> cellsIndex, Pos directionOffset) {
+        for (Pos index : cellsIndex) {
+            int row = index.getRow() + directionOffset.getRow();
+            int col = index.getCol() + directionOffset.getCol();
             if (row < 0 || col < 0 || col >= GRID_COLS
                     || state[row][col].getUpdateType() == UpdateType.LOCKED) return true;
         }
         return false;
     }
 
-    public static Vector2 getDirectionOffset(ShiftDirection direction) {
+    public static Pos getDirectionOffset(ShiftDirection direction) {
         switch (direction) {
             case DOWN:
-                return new Vector2(-1, 0);
+                return new Pos(-1, 0);
             case RIGHT:
-                return new Vector2(0, 1);
+                return new Pos(0, 1);
             case LEFT:
-                return new Vector2(0, -1);
+                return new Pos(0, -1);
         }
-        return new Vector2(0, 0);
+        return new Pos(0, 0);
     }
 }

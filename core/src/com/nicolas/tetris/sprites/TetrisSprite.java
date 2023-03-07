@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.nicolas.tetris.manager.ResourceManager;
+import com.nicolas.tetris.utils.Pos;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -32,8 +33,8 @@ public abstract class TetrisSprite {
         init(subTextureNames);
     }
 
-    public void render(SpriteBatch batch, Vector2 position) {
-        batch.draw(getTexture(), position.x, position.y, getTextureSize().x, getTextureSize().y);
+    public void render(SpriteBatch batch, Pos position) {
+        batch.draw(getTexture(), position.getRow(), position.getCol(), getTextureSize().x, getTextureSize().y);
     }
 
     private void init(List<String> subTextureNames) {

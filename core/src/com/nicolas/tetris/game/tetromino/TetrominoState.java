@@ -1,7 +1,7 @@
 package com.nicolas.tetris.game.tetromino;
 
-import com.badlogic.gdx.math.Vector2;
 import com.nicolas.tetris.game.cell.CellType;
+import com.nicolas.tetris.utils.Pos;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,5 +11,5 @@ public class TetrominoState {
     private final int[][] cellMap;
     private final CellType type;
 
-    private final Vector2 pos;
+    private final Pos pos;
 }
