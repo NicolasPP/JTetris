@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nicolas.tetris.game.cell.Cell;
 import com.nicolas.tetris.game.cell.UpdateType;
+import com.nicolas.tetris.game.gui.GameInfoUI;
 import com.nicolas.tetris.game.state.GameState;
 import com.nicolas.tetris.game.state.ShiftDirection;
 import com.nicolas.tetris.utils.RotationDirection;
@@ -16,12 +17,17 @@ import com.nicolas.tetris.utils.Pos;
 
 import java.util.Arrays;
 
+import static com.nicolas.tetris.config.TetrisConfig.GRID_ROWS;
+import static com.nicolas.tetris.config.TetrisConfig.SPAWN_ROW_COUNT;
+
 public class GameManager implements InputProcessor {
     private final GameState gameState;
     private final SpriteBagRand bagRandomizer = new SpriteBagRand();
     private final LevelManager levelMan = new LevelManager();
     private final BoardSprite board = BoardSprite.getInstance();
-    private final Pos boardPos = new Pos(30 , 0);
+
+    private final GameInfoUI gameUI = new GameInfoUI();
+    private final Pos boardPos = new Pos(0, 30);
     private float accumulator = 0f;
 
     public GameManager() {
@@ -30,11 +36,17 @@ public class GameManager implements InputProcessor {
     }
 
     public void render(SpriteBatch batch) {
-        board.render(batch, boardPos);
+        board.renderTexture(batch, boardPos);
 
         Arrays.stream(gameState.getState()).forEach(
-                row -> Arrays.stream(row).filter(Cell::isNotEmpty).filter(Cell::isNotSpawn).forEach(
-                        cell -> TetrominoSprite.get(cell.getType()).renderSquare(batch, cell.getBottomLeft())));
+                row -> Arrays.stream(row).filter(Cell::isNotEmpty).filter(Cell::isNotSpawn).forEach(cell -> {
+                    if (cell.getBottomLeft().getRow() > GRID_ROWS - SPAWN_ROW_COUNT) {
+                        TetrominoSprite tetromino = TetrominoSprite.get(cell.getType());
+                        tetromino.renderSubTexture(batch, tetromino.getColorName(), cell.getBottomLeft());
+                    }
+                }));
+
+        gameUI.render(batch);
     }
 
     public void update(float dt) {
