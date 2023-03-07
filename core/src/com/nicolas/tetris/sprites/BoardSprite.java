@@ -22,5 +22,4 @@ public class BoardSprite extends TetrisSprite {
                 Arrays.asList(BG_GRAY_NAME, BG_BLACK_NAME, BORDER_NAME)
         );
     }
-
 }
