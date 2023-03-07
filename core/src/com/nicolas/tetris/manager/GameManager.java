@@ -9,7 +9,7 @@ import com.nicolas.tetris.game.cell.UpdateType;
 import com.nicolas.tetris.game.state.GameState;
 import com.nicolas.tetris.game.state.ShiftDirection;
 import com.nicolas.tetris.utils.RotationDirection;
-import com.nicolas.tetris.game.randomizer.TetrominoBagRandomizer;
+import com.nicolas.tetris.game.randomizer.SpriteBagRand;
 import com.nicolas.tetris.sprites.BoardSprite;
 import com.nicolas.tetris.sprites.TetrominoSprite;
 import com.nicolas.tetris.utils.Pos;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 
 public class GameManager implements InputProcessor {
     private final GameState gameState = new GameState();
-    private final TetrominoBagRandomizer bagRandomizer = new TetrominoBagRandomizer();
+    private final SpriteBagRand bagRandomizer = new SpriteBagRand();
     private final LevelManager levelMan = new LevelManager();
     private final BoardSprite board = BoardSprite.getInstance();
     private float accumulator = 0f;
