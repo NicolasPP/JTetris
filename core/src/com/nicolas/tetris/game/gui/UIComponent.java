@@ -22,6 +22,12 @@ public abstract class UIComponent {
         height = h;
     }
 
+    public int getHeightUI(){
+        return (int) (CELL_SIZE * TEXTURE_SCALE) * height;
+    }
+    public int getWidthUI(){
+        return (int) (CELL_SIZE * TEXTURE_SCALE) * width;
+    }
     public abstract void render(SpriteBatch batch);
 
     public void renderBackGround(SpriteBatch batch, String subTextureName){
