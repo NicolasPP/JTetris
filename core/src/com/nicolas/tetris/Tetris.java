@@ -2,6 +2,7 @@ package com.nicolas.tetris;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.nicolas.tetris.manager.ResourceManager;
@@ -13,6 +14,7 @@ import static com.nicolas.tetris.config.TetrisConfig.PIXEL_FONT_TTF;
 public class Tetris extends ApplicationAdapter {
     SpriteBatch batch;
     GameManager gameManager;
+    Color backGroundColor;
 
     @Override
     public void create() {
@@ -20,12 +22,13 @@ public class Tetris extends ApplicationAdapter {
         TetrominoSprite.createAll();
         batch = new SpriteBatch();
         gameManager = new GameManager();
+        backGroundColor = new Color(Color.DARK_GRAY);
     }
 
     @Override
     public void render() {
         gameManager.update(Gdx.graphics.getDeltaTime());
-        ScreenUtils.clear(1, 0, 0, 1);
+        ScreenUtils.clear(backGroundColor);
         batch.begin();
         gameManager.render(batch);
         batch.end();
