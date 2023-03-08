@@ -19,15 +19,17 @@ import java.util.Arrays;
 
 import static com.nicolas.tetris.config.TetrisConfig.GRID_ROWS;
 import static com.nicolas.tetris.config.TetrisConfig.SPAWN_ROW_COUNT;
+import static com.nicolas.tetris.config.TetrisConfig.STATS_UI_WIDTH;
+import static com.nicolas.tetris.config.TetrisConfig.CELL_SIZE;
+import static com.nicolas.tetris.config.TetrisConfig.TEXTURE_SCALE;
 
 public class GameManager implements InputProcessor {
     private final GameState gameState;
     private final SpriteBagRand bagRandomizer = new SpriteBagRand();
     private final LevelManager levelMan = new LevelManager();
     private final BoardSprite board = BoardSprite.getInstance();
-
     private final GameInfoUI gameUI = new GameInfoUI();
-    private final Pos boardPos = new Pos(0, 30);
+    private final Pos boardPos = new Pos(0, STATS_UI_WIDTH * (int)(CELL_SIZE * TEXTURE_SCALE));
     private float accumulator = 0f;
 
     public GameManager() {
