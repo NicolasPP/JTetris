@@ -1,6 +1,7 @@
 package com.nicolas.tetris.game.gui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.nicolas.tetris.game.randomizer.SpriteBagRand;
 
 public class GameInfoUI {
     private final ScoreUI score;
@@ -9,9 +10,9 @@ public class GameInfoUI {
 
     private final HoldUI hold;
 
-    public GameInfoUI() {
+    public GameInfoUI(SpriteBagRand bagRandomizer) {
         score = new ScoreUI();
-        spawnQueue = new SpawnQueueUI();
+        spawnQueue = new SpawnQueueUI(bagRandomizer);
         stats = new StatsUI();
         hold = new HoldUI();
     }
