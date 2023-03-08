@@ -34,7 +34,7 @@ public class TetrisConfig {
     final static public int[][] SHAPE_T_MAP = {{0, 1, 0, 0}, {1, 2, 1, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
     final static public int[][] SHAPE_Z_MAP = {{1, 1, 0, 0}, {0, 2, 1, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
     final static public float TEXTURE_SCALE = 0.5f;
-    final static public int WINDOW_WIDTH = 512;
+    final static public int WINDOW_WIDTH = 640;
     final static public int WINDOW_HEIGHT = 704;
     final static public int CELL_SIZE = 64;
     final static public int BOARD_COLS = 12;
@@ -47,13 +47,10 @@ public class TetrisConfig {
     public final static int CELL_MAP_SIZE = 4;
     public final static int SCORE_UI_WIDTH = 4;
     public final static int SCORE_UI_HEIGHT = 6;
-
     public final static int STATS_UI_WIDTH = 4;
-    public final static int STATS_UI_HEIGHT = 18;
-
+    public final static int STATS_UI_HEIGHT = 16;
     public final static int SPAWN_QUEUE_UI_WIDTH = 4;
-    public final static int SPAWN_QUEUE_UI_HEIGHT = 18;
-
+    public final static int SPAWN_QUEUE_UI_HEIGHT = 16;
     public final static int HOLD_UI_WIDTH = 4;
     public final static int HOLD_UI_HEIGHT = 6;
     public final static int PIVOT_ID = 2;
