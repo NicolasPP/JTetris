@@ -28,7 +28,7 @@ public class GameManager implements InputProcessor {
     private final SpriteBagRand bagRandomizer = new SpriteBagRand();
     private final LevelManager levelMan = new LevelManager();
     private final BoardSprite board = BoardSprite.getInstance();
-    private final GameInfoUI gameUI = new GameInfoUI();
+    private final GameInfoUI gameUI = new GameInfoUI(bagRandomizer);
     private final Pos boardPos = new Pos(0, STATS_UI_WIDTH * (int)(CELL_SIZE * TEXTURE_SCALE));
     private float accumulator = 0f;
 
@@ -38,7 +38,7 @@ public class GameManager implements InputProcessor {
     }
 
     public void render(SpriteBatch batch) {
-        board.renderTexture(batch, boardPos);
+        board.renderTexture(batch, boardPos, false);
 
         Arrays.stream(gameState.getState()).forEach(
                 row -> Arrays.stream(row).filter(Cell::isNotEmpty).filter(Cell::isNotSpawn).forEach(cell -> {
