@@ -9,6 +9,11 @@ public class Pos {
     private int row;
     private int col;
 
+    public Pos(Pos pos){
+        row = pos.getRow();
+        col = pos.getCol();
+    }
+
     public void decrement(Pos other){
         row -= other.row; col -= other.col;
 
