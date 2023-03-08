@@ -13,7 +13,6 @@ public class SpriteBagRand {
     public SpriteBagRand(){
         Collections.shuffle(bag);
         queue.addAll(bag);
-        System.out.println(queue);
     }
 
     private void restock(){

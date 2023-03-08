@@ -23,7 +23,6 @@ public class SpawnQueueUI extends UIComponent {
                         (STATS_UI_WIDTH + BOARD_COLS) * (int)(CELL_SIZE * TEXTURE_SCALE)),
                 SPAWN_QUEUE_UI_WIDTH, SPAWN_QUEUE_UI_HEIGHT);
         bagRandomizer = randomizer;
-        System.out.println(randomizer.peekQueue().length);
     }
 
     @Override

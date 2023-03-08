@@ -97,7 +97,6 @@ public class GameManager implements InputProcessor {
     @Override
     public boolean touchDown(int i, int i1, int i2, int i3) {
         gameState.print();
-        System.out.println(levelMan.getScore());
         return false;
     }
 
