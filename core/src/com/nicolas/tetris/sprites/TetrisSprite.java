@@ -2,6 +2,7 @@ package com.nicolas.tetris.sprites;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Vector2;
 import com.nicolas.tetris.manager.ResourceManager;
 import com.nicolas.tetris.utils.Pos;
@@ -33,8 +34,14 @@ public abstract class TetrisSprite {
         init(subTextureNames);
     }
 
-    public void renderTexture(SpriteBatch batch, Pos position) {
-        batch.draw(getTexture(), position.getCol(), position.getRow(), getTextureSize().x, getTextureSize().y);
+    public void renderTexture(SpriteBatch batch, Pos position, Boolean rotate) {
+        Affine2 transform = new Affine2();
+        transform.translate(position.getCol(), position.getRow());
+        if (rotate) {
+            transform.rotate(90);
+            transform.translate(-getTextureSize().x + (CELL_SIZE * TEXTURE_SCALE), -getTextureSize().y);
+        }
+        batch.draw(getTexture(), getTextureSize().x, getTextureSize().y, transform);
     }
 
     public void renderSubTexture(SpriteBatch batch, String subTextureName, Pos position) {
