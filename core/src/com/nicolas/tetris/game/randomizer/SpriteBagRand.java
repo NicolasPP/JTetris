@@ -13,6 +13,7 @@ public class SpriteBagRand {
     public SpriteBagRand(){
         Collections.shuffle(bag);
         queue.addAll(bag);
+        System.out.println(queue);
     }
 
     private void restock(){
@@ -25,5 +26,10 @@ public class SpriteBagRand {
         CellType next = queue.poll();
         queue.add(stock.poll());
         return TetrominoSprite.get(next);
+    }
+    public CellType[] peekQueue(){
+        CellType[] cellTypes = new CellType[queue.size()];
+        queue.toArray(cellTypes);
+        return cellTypes;
     }
 }
