@@ -2,7 +2,9 @@ package com.nicolas.tetris.game.gui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nicolas.tetris.game.randomizer.SpriteBagRand;
+import lombok.Data;
 
+@Data
 public class GameInfoUI {
     private final ScoreUI score;
     private final SpawnQueueUI spawnQueue;
@@ -23,5 +25,4 @@ public class GameInfoUI {
         stats.render(batch);
         hold.render(batch);
     }
-
 }
