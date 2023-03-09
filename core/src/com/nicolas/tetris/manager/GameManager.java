@@ -54,15 +54,18 @@ public class GameManager implements InputProcessor {
         accumulator += dt;
         if (accumulator >= levelMan.getTimePerCell()) {
             if (gameState.isSpawnUnlocked()){
-                gameUI.getStats().addStat(bagRandomizer.peekQueue());
+                gameUI.getStatsUI().addStat(bagRandomizer.peekQueue());
                 gameState.spawnTetromino(bagRandomizer.getNext());
-                gameUI.getSpawnQueue().updatePositions();
+                gameUI.getSpawnQueueUI().updatePositions();
             }
+
             gameState.shift(ShiftDirection.DOWN, UpdateType.FALLING);
             levelMan.processClearedLines(gameState.processFilledLines());
-            gameUI.getScore().updateValues(levelMan.getScore(), levelMan.getLevel(), levelMan.getTotalLinesCleared());
             gameState.shift(ShiftDirection.DOWN, UpdateType.LOCK_FALL);
+
             accumulator = 0f;
+            gameUI.getLevelUI().updateValues(levelMan.getScore(), levelMan.getLevel(), levelMan.getTotalLinesCleared());
+
             if (gameState.isGameOver() || levelMan.getTotalLinesCleared() >= MAX_LINES){
                 gameState.restartGame(boardPos);
                 gameUI.restartGame();

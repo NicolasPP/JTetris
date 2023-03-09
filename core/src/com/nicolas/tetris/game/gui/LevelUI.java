@@ -21,7 +21,7 @@ import static com.nicolas.tetris.config.TetrisConfig.LEVEL_LABEL;
 import static com.nicolas.tetris.config.TetrisConfig.LINES_LABEL;
 import static com.nicolas.tetris.config.TetrisConfig.BG_GRAY_NAME;
 
-public class ScoreUI extends UIComponent {
+public class LevelUI extends UIComponent {
 
     private BitmapFont labelFont;
     private BitmapFont valueFont;
@@ -33,7 +33,7 @@ public class ScoreUI extends UIComponent {
     private Integer linesValue;
     private Integer levelValue;
 
-    public ScoreUI() {
+    public LevelUI() {
         super(new Vector2((STATS_UI_COLS + BOARD_COLS) * (CELL_SIZE * TEXTURE_SCALE), 0),
                 SCORE_UI_COLS, SCORE_UI_ROWS);
         init();

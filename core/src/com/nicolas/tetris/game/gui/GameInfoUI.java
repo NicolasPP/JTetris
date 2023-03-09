@@ -6,27 +6,27 @@ import lombok.Data;
 
 @Data
 public class GameInfoUI {
-    private final ScoreUI score;
-    private final SpawnQueueUI spawnQueue;
-    private final StatsUI stats;
-    private final HoldUI hold;
+    private final LevelUI levelUI;
+    private final SpawnQueueUI spawnQueueUI;
+    private final StatsUI statsUI;
+    private final HoldUI holdUI;
     public GameInfoUI(SpriteBagRand bagRandomizer) {
-        score = new ScoreUI();
-        spawnQueue = new SpawnQueueUI(bagRandomizer);
-        stats = new StatsUI();
-        hold = new HoldUI();
+        levelUI = new LevelUI();
+        spawnQueueUI = new SpawnQueueUI(bagRandomizer);
+        statsUI = new StatsUI();
+        holdUI = new HoldUI();
     }
 
     public void render(SpriteBatch batch) {
-        score.render(batch);
-        spawnQueue.render(batch);
-        stats.render(batch);
-        hold.render(batch);
+        levelUI.render(batch);
+        spawnQueueUI.render(batch);
+        statsUI.render(batch);
+        holdUI.render(batch);
     }
 
     public void restartGame(){
-        stats.reset();
-        spawnQueue.reset();
-        score.reset();
+        statsUI.reset();
+        spawnQueueUI.reset();
+        levelUI.reset();
     }
 }
