@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.nicolas.tetris.game.cell.Cell;
 import com.nicolas.tetris.game.cell.UpdateType;
 import com.nicolas.tetris.game.gui.GameInfoUI;
@@ -13,13 +14,10 @@ import com.nicolas.tetris.utils.RotationDirection;
 import com.nicolas.tetris.game.randomizer.SpriteBagRand;
 import com.nicolas.tetris.sprites.BoardSprite;
 import com.nicolas.tetris.sprites.TetrominoSprite;
-import com.nicolas.tetris.utils.Pos;
 
 import java.util.Arrays;
 
-import static com.nicolas.tetris.config.TetrisConfig.GRID_ROWS;
-import static com.nicolas.tetris.config.TetrisConfig.SPAWN_ROW_COUNT;
-import static com.nicolas.tetris.config.TetrisConfig.STATS_UI_WIDTH;
+import static com.nicolas.tetris.config.TetrisConfig.STATS_UI_COLS;
 import static com.nicolas.tetris.config.TetrisConfig.CELL_SIZE;
 import static com.nicolas.tetris.config.TetrisConfig.TEXTURE_SCALE;
 
@@ -29,7 +27,7 @@ public class GameManager implements InputProcessor {
     private final LevelManager levelMan = new LevelManager();
     private final BoardSprite board = BoardSprite.getInstance();
     private final GameInfoUI gameUI = new GameInfoUI(bagRandomizer);
-    private final Pos boardPos = new Pos(0, STATS_UI_WIDTH * (int)(CELL_SIZE * TEXTURE_SCALE));
+    private final Vector2 boardPos = new Vector2(STATS_UI_COLS * (int)(CELL_SIZE * TEXTURE_SCALE), 0);
     private float accumulator = 0f;
 
     public GameManager() {
@@ -42,9 +40,9 @@ public class GameManager implements InputProcessor {
 
         Arrays.stream(gameState.getState()).forEach(
                 row -> Arrays.stream(row).filter(Cell::isNotEmpty).filter(Cell::isNotSpawn).forEach(cell -> {
-                    if (cell.getBottomLeft().getRow() > GRID_ROWS - SPAWN_ROW_COUNT) {
+                    if (cell.getBottomLeft().y > 0 && cell.getBottomLeft().x > 0) {
                         TetrominoSprite tetromino = TetrominoSprite.get(cell.getType());
-                        tetromino.renderSubTexture(batch, tetromino.getColorName(), cell.getBottomLeft());
+                        tetromino.renderSubTexture(batch, tetromino.getColorName(), cell.getBottomLeft(), tetromino.getSubTextureSize(), false);
                     }
                 }));
 
@@ -54,8 +52,12 @@ public class GameManager implements InputProcessor {
     public void update(float dt) {
         accumulator += dt;
         if (accumulator >= levelMan.getTimePerCell()) {
-            if (gameState.isSpawnUnlocked())
+            if (gameState.isSpawnUnlocked()){
+                gameUI.getStats().addStat(bagRandomizer.peekQueue());
                 gameState.spawnTetromino(bagRandomizer.getNext());
+                gameUI.getSpawnQueue().updatePositions();
+
+            }
             gameState.shift(ShiftDirection.DOWN, UpdateType.FALLING);
             levelMan.processClearedLines(gameState.processFilledLines());
             gameState.shift(ShiftDirection.DOWN, UpdateType.LOCK_FALL);
