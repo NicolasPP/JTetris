@@ -26,7 +26,7 @@ public class SpriteBagRand {
         queue.add(stock.poll());
         return TetrominoSprite.get(next);
     }
-    public CellType[] peekQueue(){
+    public CellType[] peekWholeQueue(){
         CellType[] cellTypes = new CellType[queue.size()];
         queue.toArray(cellTypes);
         return cellTypes;
