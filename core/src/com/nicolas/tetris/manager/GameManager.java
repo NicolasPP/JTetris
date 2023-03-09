@@ -20,6 +20,7 @@ import java.util.Arrays;
 import static com.nicolas.tetris.config.TetrisConfig.STATS_UI_COLS;
 import static com.nicolas.tetris.config.TetrisConfig.CELL_SIZE;
 import static com.nicolas.tetris.config.TetrisConfig.TEXTURE_SCALE;
+import static com.nicolas.tetris.config.TetrisConfig.MAX_LINES;
 
 public class GameManager implements InputProcessor {
     private final GameState gameState;
@@ -62,6 +63,11 @@ public class GameManager implements InputProcessor {
             gameUI.getScore().updateValues(levelMan.getScore(), levelMan.getLevel(), levelMan.getTotalLinesCleared());
             gameState.shift(ShiftDirection.DOWN, UpdateType.LOCK_FALL);
             accumulator = 0f;
+            if (gameState.isGameOver() || levelMan.getTotalLinesCleared() >= MAX_LINES){
+                gameState.restartGame(boardPos);
+                gameUI.restartGame();
+                bagRandomizer.reset();
+            }
         }
     }
 
