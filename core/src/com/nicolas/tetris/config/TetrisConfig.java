@@ -57,12 +57,12 @@ public class TetrisConfig {
     public final static int HOLD_UI_ROWS = 3;
     public final static int PIVOT_ID = 2;
     public final static int LINES_PER_LEVEL = 10;
+    public final static int SCORE_PADDING = 10;
     public final static int SCORE_VALUE_FONT_SIZE = 15;
+    public final static int MAX_LINES = 150;
     public final static String SPRITE_TXT_FILE = "sprites.txt";
     public final static String PIXEL_FONT_TTF = "thirteen_pixel_fonts.ttf";
     public final static String TETRIS_FONT_TTF = "Tetris.ttf";
-
-//    GAME_OVER_LABEL  "GAME OVER!";
     public final static String SCORE_LABEL = "Score";
     public final static String LEVEL_LABEL = "Level";
     public final static String LINES_LABEL = "Lines";
