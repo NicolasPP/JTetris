@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Vector2;
 import com.nicolas.tetris.manager.ResourceManager;
-import com.nicolas.tetris.utils.Pos;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -34,9 +33,9 @@ public abstract class TetrisSprite {
         init(subTextureNames);
     }
 
-    public void renderTexture(SpriteBatch batch, Pos position, Boolean rotate) {
+    public void renderTexture(SpriteBatch batch, Vector2 position, Boolean rotate) {
         Affine2 transform = new Affine2();
-        transform.translate(position.getCol(), position.getRow());
+        transform.translate(position.x, position.y);
         if (rotate) {
             transform.rotate(90);
             transform.translate(-getTextureSize().x + (CELL_SIZE * TEXTURE_SCALE), -getTextureSize().y);
@@ -44,10 +43,21 @@ public abstract class TetrisSprite {
         batch.draw(getTexture(), getTextureSize().x, getTextureSize().y, transform);
     }
 
-    public void renderSubTexture(SpriteBatch batch, String subTextureName, Pos position) {
+    public void renderSubTexture(
+            SpriteBatch batch,
+            String subTextureName,
+            Vector2 position,
+            Vector2 textureSize,
+            boolean rotate) {
         TextureRegion subTexture = getSubTextures().get(subTextureName);
         if (subTexture == null) return;
-        batch.draw(subTexture, position.getCol(), position.getRow(), getSubTextureSize().x, getSubTextureSize().y);
+        Affine2 transform = new Affine2();
+        transform.translate(position.x, position.y);
+        if (rotate) {
+            transform.rotate(90);
+            transform.translate(-textureSize.x + (CELL_SIZE * TEXTURE_SCALE), -textureSize.y);
+        }
+        batch.draw(subTexture, textureSize.x, textureSize.y, transform);
     }
 
     private void init(List<String> subTextureNames) {
