@@ -1,21 +1,21 @@
 package com.nicolas.tetris.game.gui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.nicolas.tetris.utils.Pos;
+import com.badlogic.gdx.math.Vector2;
 
-import static com.nicolas.tetris.config.TetrisConfig.STATS_UI_WIDTH;
+import static com.nicolas.tetris.config.TetrisConfig.STATS_UI_COLS;
 import static com.nicolas.tetris.config.TetrisConfig.BOARD_COLS;
 import static com.nicolas.tetris.config.TetrisConfig.CELL_SIZE;
 import static com.nicolas.tetris.config.TetrisConfig.TEXTURE_SCALE;
-import static com.nicolas.tetris.config.TetrisConfig.SCORE_UI_WIDTH;
-import static com.nicolas.tetris.config.TetrisConfig.SCORE_UI_HEIGHT;
+import static com.nicolas.tetris.config.TetrisConfig.SCORE_UI_COLS;
+import static com.nicolas.tetris.config.TetrisConfig.SCORE_UI_ROWS;
 import static com.nicolas.tetris.config.TetrisConfig.BG_GRAY_NAME;
 
 public class ScoreUI extends UIComponent {
 
     public ScoreUI() {
-        super(new Pos(0, (STATS_UI_WIDTH + BOARD_COLS) * (int)(CELL_SIZE * TEXTURE_SCALE)),
-                SCORE_UI_WIDTH, SCORE_UI_HEIGHT);
+        super(new Vector2((STATS_UI_COLS + BOARD_COLS) * (CELL_SIZE * TEXTURE_SCALE), 0),
+                SCORE_UI_COLS, SCORE_UI_ROWS);
     }
 
     @Override
