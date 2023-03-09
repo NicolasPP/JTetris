@@ -5,20 +5,15 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Pos {
+public class Index {
     private int row;
     private int col;
 
-    public Pos(Pos pos){
-        row = pos.getRow();
-        col = pos.getCol();
-    }
-
-    public void decrement(Pos other){
+    public void decrement(Index other){
         row -= other.row; col -= other.col;
 
     }
-    public void increment(Pos other){
+    public void increment(Index other){
         row += other.row; col += other.col;
     }
 }
