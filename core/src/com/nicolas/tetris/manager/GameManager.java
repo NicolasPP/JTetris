@@ -60,6 +60,7 @@ public class GameManager implements InputProcessor {
             }
             gameState.shift(ShiftDirection.DOWN, UpdateType.FALLING);
             levelMan.processClearedLines(gameState.processFilledLines());
+            gameUI.getScore().updateValues(levelMan.getScore(), levelMan.getLevel(), levelMan.getTotalLinesCleared());
             gameState.shift(ShiftDirection.DOWN, UpdateType.LOCK_FALL);
             accumulator = 0f;
         }
