@@ -1,8 +1,9 @@
 package com.nicolas.tetris.sprites;
 
+import com.badlogic.gdx.graphics.Color;
 import com.nicolas.tetris.game.cell.CellType;
 import com.nicolas.tetris.game.state.TetrominoState;
-import com.nicolas.tetris.utils.Pos;
+import com.nicolas.tetris.utils.Index;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -88,6 +89,20 @@ public class TetrominoSprite extends TetrisSprite {
     public String getColorName() {
         return colorName;
     }
+    public String getGhostName() {return ghostName;}
+
+    public Color getColor(){
+        switch (colorName){
+            case LIGHT_BLUE: return new Color(Color.BLUE);
+            case BLUE: return new Color(Color.BLUE);
+            case ORANGE: return new Color(Color.ORANGE);
+            case YELLOW: return new Color(Color.YELLOW);
+            case GREEN: return new Color(Color.GREEN);
+            case PURPLE: return new Color(Color.PURPLE);
+            case RED: return new Color(Color.RED);
+        }
+        return new Color(Color.BLUE);
+    }
 
     public int[][] getCellMapClone() {
         if (cellMap == null) return null;
@@ -104,7 +119,7 @@ public class TetrominoSprite extends TetrisSprite {
         return TetrominoState.builder()
                 .cellMap(getCellMapClone())
                 .type(cellType)
-                .pos(new Pos(SPAWN_ROW, SPAWN_COl))
+                .posIndex(new Index(SPAWN_ROW, SPAWN_COl))
                 .build();
     }
 }
