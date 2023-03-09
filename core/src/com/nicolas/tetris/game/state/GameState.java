@@ -96,6 +96,17 @@ public class GameState {
         }
     }
 
+    public boolean isGameOver(){
+        for(Cell cell : state[SPAWN_ROW - SPAWN_ROW_COUNT]){
+            if (cell.getUpdateType() == UpdateType.LOCKED) return true;
+        }
+        return false;
+    }
+
+    public void restartGame(Vector2 boardPos){
+        init(boardPos);
+    }
+
     public void rotate(RotationDirection direction) {
         tetrominoState.rotate(direction);
 
