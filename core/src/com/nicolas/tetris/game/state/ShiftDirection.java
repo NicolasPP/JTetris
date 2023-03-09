@@ -1,20 +1,20 @@
 package com.nicolas.tetris.game.state;
 
-import com.nicolas.tetris.utils.Pos;
+import com.nicolas.tetris.utils.Index;
 
 public enum ShiftDirection {
     DOWN, RIGHT, LEFT;
 
-    public Pos getDirectionOffset() {
+    public Index getDirectionOffset() {
         switch (this) {
             case DOWN:
-                return new Pos(-1, 0);
+                return new Index(-1, 0);
             case RIGHT:
-                return new Pos(0, 1);
+                return new Index(0, 1);
             case LEFT:
-                return new Pos(0, -1);
+                return new Index(0, -1);
         }
-        return new Pos(0, 0);
+        return new Index(0, 0);
     }
 
 }
