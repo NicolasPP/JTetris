@@ -26,8 +26,6 @@ public abstract class UIComponent {
         rows = r;
     }
 
-    public abstract void render(SpriteBatch batch);
-
     public void renderBackGround(SpriteBatch batch, String subTextureName) {
         int cellSize = (int) (CELL_SIZE * TEXTURE_SCALE);
         IntStream.range(0, rows).forEach(row -> IntStream.range(0, cols).forEach(col ->

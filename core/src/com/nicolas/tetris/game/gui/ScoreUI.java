@@ -77,7 +77,6 @@ public class ScoreUI extends UIComponent {
         levelValue = level;
     }
 
-    @Override
     public void render(SpriteBatch batch) {
         renderBackGround(batch, BG_GRAY_NAME);
 

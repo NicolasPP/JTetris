@@ -127,7 +127,6 @@ public class StatsUI extends UIComponent {
     public void addStat(CellType cellType){
         stats.put(cellType, stats.get(cellType) + 1);
     }
-    @Override
     public void render(SpriteBatch batch) {
         renderBackGround(batch, BG_BLACK_NAME);
         for(CellType cellType : stats.keySet()){

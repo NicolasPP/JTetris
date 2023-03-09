@@ -11,7 +11,6 @@ import static com.nicolas.tetris.config.TetrisConfig.HOLD_UI_ROWS;
 import static com.nicolas.tetris.config.TetrisConfig.BG_GRAY_NAME;
 
 public class HoldUI extends UIComponent {
-    @Override
     public void render(SpriteBatch batch) {
         renderBackGround(batch, BG_GRAY_NAME);
     }

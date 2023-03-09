@@ -18,7 +18,7 @@ import static com.nicolas.tetris.config.TetrisConfig.BG_BLACK_NAME;
 public class SpawnQueueUI extends UIComponent {
 
     final private Vector2[] positions;
-    SpriteBagRand bagRandomizer;
+    final SpriteBagRand bagRandomizer;
 
     public SpawnQueueUI(SpriteBagRand randomizer) {
         super(new Vector2((STATS_UI_COLS + BOARD_COLS) * (int) (CELL_SIZE * TEXTURE_SCALE),
@@ -65,7 +65,6 @@ public class SpawnQueueUI extends UIComponent {
         }
     }
 
-    @Override
     public void render(SpriteBatch batch) {
         renderBackGround(batch, BG_BLACK_NAME);
         CellType[] queueWholePeek = bagRandomizer.peekWholeQueue();
