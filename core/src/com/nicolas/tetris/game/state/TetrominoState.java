@@ -1,7 +1,7 @@
 package com.nicolas.tetris.game.state;
 
 import com.nicolas.tetris.game.cell.CellType;
-import com.nicolas.tetris.utils.Pos;
+import com.nicolas.tetris.utils.Index;
 import com.nicolas.tetris.utils.Rotate2DArray;
 import com.nicolas.tetris.utils.RotationDirection;
 import lombok.Builder;
@@ -16,13 +16,13 @@ public class TetrominoState {
     private final int[][] cellMap;
     private final CellType type;
 
-    private final Pos pos;
+    private final Index posIndex;
 
 
     public void rotate(RotationDirection direction){
         if (type == CellType.O) return;
 
-        Pos pivotOffset = getPivotIndex();
+        Index pivotOffset = getPivotIndex();
 
         if (type == CellType.I) {
             Rotate2DArray.transpose(cellMap);
@@ -30,22 +30,22 @@ public class TetrominoState {
             Rotate2DArray.rotate90(cellMap, direction);
         }
 
-        Pos afterPivotOffset = getPivotIndex();
+        Index afterPivotOffset = getPivotIndex();
 
         pivotOffset.decrement(afterPivotOffset);
 
         adjustForPivot(pivotOffset);
     }
-    private Pos getPivotIndex(){
+    private Index getPivotIndex(){
         for (int row = 0; row < cellMap.length; row++) {
             for (int col = 0; col < cellMap[row].length; col++) {
-                if (cellMap[row][col] == PIVOT_ID) return new Pos(row, col);
+                if (cellMap[row][col] == PIVOT_ID) return new Index(row, col);
             }
         }
-        return new Pos(0, 0);
+        return new Index(0, 0);
     }
 
-    private void adjustForPivot(Pos pivot){
+    private void adjustForPivot(Index pivot){
         for(int i = 0; i < cellMap.length; i++){
             for(int j = 0; j < cellMap[i].length; j++){
                 int row = pivot.getRow() + i; int col = pivot.getCol() + j;
