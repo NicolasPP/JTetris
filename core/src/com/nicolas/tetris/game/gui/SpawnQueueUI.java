@@ -75,4 +75,8 @@ public class SpawnQueueUI extends UIComponent {
             tetromino.renderTexture(batch, positions[index], type == CellType.I);
         }
     }
+
+    public void reset(){
+        updatePositions();
+    }
 }

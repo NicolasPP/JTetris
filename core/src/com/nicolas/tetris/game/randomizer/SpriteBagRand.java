@@ -9,12 +9,18 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SpriteBagRand {
-    private final LinkedList<CellType> queue = new LinkedList<>();
-    private final LinkedList<CellType> stock = new LinkedList<>();
+    private final LinkedList<CellType> queue;
+    private final LinkedList<CellType> stock;
     private final List<CellType> bag = Arrays.asList(
             CellType.I, CellType.L, CellType.J, CellType.S, CellType.O, CellType.T, CellType.Z);
 
     public SpriteBagRand() {
+        queue = new LinkedList<>();
+        stock = new LinkedList<>();
+        init();
+    }
+
+    private void init(){
         Collections.shuffle(bag);
         queue.addAll(bag);
     }
@@ -35,6 +41,12 @@ public class SpriteBagRand {
         CellType[] cellTypes = new CellType[queue.size()];
         queue.toArray(cellTypes);
         return cellTypes;
+    }
+
+    public void reset(){
+        stock.clear();
+        queue.clear();
+        init();
     }
 
     public CellType peekQueue() {

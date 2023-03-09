@@ -143,4 +143,10 @@ public class StatsUI extends UIComponent {
             fonts.get(cellType).draw(batch, stats.get(cellType).toString().strip(), fontPos.x , fontPos.y);
         }
     }
+
+    public void reset(){
+        stats.clear();
+        fonts.clear();
+        init();
+    }
 }

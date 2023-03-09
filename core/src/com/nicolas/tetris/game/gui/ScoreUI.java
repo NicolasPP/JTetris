@@ -7,14 +7,26 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.nicolas.tetris.manager.ResourceManager;
 
-import static com.nicolas.tetris.config.TetrisConfig.*;
+import static com.nicolas.tetris.config.TetrisConfig.SCORE_PADDING;
+import static com.nicolas.tetris.config.TetrisConfig.STATS_UI_COLS;
+import static com.nicolas.tetris.config.TetrisConfig.BOARD_COLS;
+import static com.nicolas.tetris.config.TetrisConfig.CELL_SIZE;
+import static com.nicolas.tetris.config.TetrisConfig.TEXTURE_SCALE;
+import static com.nicolas.tetris.config.TetrisConfig.SCORE_UI_COLS;
+import static com.nicolas.tetris.config.TetrisConfig.SCORE_UI_ROWS;
+import static com.nicolas.tetris.config.TetrisConfig.SCORE_FONT_SIZE;
+import static com.nicolas.tetris.config.TetrisConfig.SCORE_VALUE_FONT_SIZE;
+import static com.nicolas.tetris.config.TetrisConfig.SCORE_LABEL;
+import static com.nicolas.tetris.config.TetrisConfig.LEVEL_LABEL;
+import static com.nicolas.tetris.config.TetrisConfig.LINES_LABEL;
+import static com.nicolas.tetris.config.TetrisConfig.BG_GRAY_NAME;
 
 public class ScoreUI extends UIComponent {
 
-    private final BitmapFont labelFont;
-    private final BitmapFont valueFont;
+    private BitmapFont labelFont;
+    private BitmapFont valueFont;
 
-    private final Vector2 scoreLabelPos, linesLabelPos, levelLabelPos,
+    private Vector2 scoreLabelPos, linesLabelPos, levelLabelPos,
             scoreValuePos, linesValuePos, levelValuePos;
 
     private int scoreValue;
@@ -24,11 +36,11 @@ public class ScoreUI extends UIComponent {
     public ScoreUI() {
         super(new Vector2((STATS_UI_COLS + BOARD_COLS) * (CELL_SIZE * TEXTURE_SCALE), 0),
                 SCORE_UI_COLS, SCORE_UI_ROWS);
-        scoreValue = 0;
-        linesValue = 0;
-        levelValue = 0;
-        int padding = 10;
+        init();
+    }
 
+    private void init(){
+        updateValues(0, 0, 0);
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = SCORE_FONT_SIZE;
         labelFont = ResourceManager.getFont(ResourceManager.Fonts.PIXEL, parameter);
@@ -41,20 +53,20 @@ public class ScoreUI extends UIComponent {
         valueLabel = getSixDigitNumber(scoreValue);
         labelLayout = new GlyphLayout(labelFont, SCORE_LABEL);
         valueLayout = new GlyphLayout(valueFont, valueLabel);
-        scoreLabelPos = new Vector2(getX(labelLayout), getBottomLeft().y + getSize().y - padding);
-        scoreValuePos = new Vector2(getX(valueLayout), scoreLabelPos.y - labelLayout.height - padding);
+        scoreLabelPos = new Vector2(getX(labelLayout), getBottomLeft().y + getSize().y - SCORE_PADDING);
+        scoreValuePos = new Vector2(getX(valueLayout), scoreLabelPos.y - labelLayout.height - SCORE_PADDING);
 
         valueLabel = getSixDigitNumber(levelValue);
         labelLayout = new GlyphLayout(labelFont, LEVEL_LABEL);
         valueLayout = new GlyphLayout(valueFont, valueLabel);
-        levelLabelPos = new Vector2(getX(labelLayout), scoreValuePos.y - valueLayout.height - padding);
-        levelValuePos = new Vector2(getX(valueLayout), levelLabelPos.y - labelLayout.height - padding);
+        levelLabelPos = new Vector2(getX(labelLayout), scoreValuePos.y - valueLayout.height - SCORE_PADDING);
+        levelValuePos = new Vector2(getX(valueLayout), levelLabelPos.y - labelLayout.height - SCORE_PADDING);
 
         valueLabel = getSixDigitNumber(linesValue);
         labelLayout = new GlyphLayout(labelFont, LINES_LABEL);
         valueLayout = new GlyphLayout(valueFont, valueLabel);
-        linesLabelPos = new Vector2(getX(labelLayout), levelValuePos.y - valueLayout.height - padding);
-        linesValuePos = new Vector2(getX(valueLayout), linesLabelPos.y - labelLayout.height - padding);
+        linesLabelPos = new Vector2(getX(labelLayout), levelValuePos.y - valueLayout.height - SCORE_PADDING);
+        linesValuePos = new Vector2(getX(valueLayout), linesLabelPos.y - labelLayout.height - SCORE_PADDING);
     }
 
     private String getSixDigitNumber(Integer num){
@@ -93,5 +105,9 @@ public class ScoreUI extends UIComponent {
         valueLabel = getSixDigitNumber(linesValue);
         labelFont.draw(batch, LINES_LABEL, linesLabelPos.x, linesLabelPos.y);
         valueFont.draw(batch, valueLabel, linesValuePos.x, linesValuePos.y);
+    }
+
+    public void reset(){
+        init();
     }
 }
