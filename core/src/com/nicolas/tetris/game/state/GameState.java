@@ -39,10 +39,11 @@ public class GameState {
         boolean isCollided = isCollided(cellsIndex, directionOffset);
         if (isCollided) {
             if (direction == ShiftDirection.DOWN) {
-                if(updateType == UpdateType.FALLING || updateType == UpdateType.LOCK_FALL){
+                if(updateType == UpdateType.FALLING){
                     cellsIndex.forEach(index -> state[index.getRow()][index.getCol()].setUpdateType(UpdateType.LOCKED));
+                    spawnUnlocked = true;
                 }
-                if(updateType == UpdateType.FALLING) spawnUnlocked = true;
+                if(updateType == UpdateType.LOCK_FALL) setNeighboursUpdateType(cellsIndex, directionOffset);
             }
         } else {
             if (updateType == UpdateType.FALLING) {
@@ -64,6 +65,34 @@ public class GameState {
                 state[index.getRow()][index.getCol()].setType(type);
                 state[index.getRow()][index.getCol()].setUpdateType(updateType);
             });
+        }
+    }
+
+    private void setNeighboursUpdateType(List<Index> cellsIndex, Index directionOffset){
+        LinkedList<Index> q = new LinkedList<>();
+        Set<Index> visited = new HashSet<>();
+
+        for (Index index : cellsIndex) {
+            if (isCellCollided(index, directionOffset)) {
+                q.add(index);
+                break;
+            }
+        }
+
+        Index[] directions = {new Index(1, 0), new Index(-1, 0), new Index(0, 1), new Index(0, -1)};
+
+        while (!q.isEmpty()) {
+            Index cellIndex = q.poll();
+            for (Index index : directions) {
+                Index nIndex = new Index(cellIndex.getRow(), cellIndex.getCol());
+                nIndex.increment(index);
+                if (nIndex.getRow() >= GRID_ROWS || nIndex.getCol() >= GRID_COLS) continue;
+                if (nIndex.getRow() < 0 || nIndex.getCol() < 0) continue;
+                if (visited.contains(index)) continue;
+                if (state[nIndex.getRow()][nIndex.getCol()].getUpdateType() == UpdateType.LOCK_FALL) q.add(nIndex);
+            }
+            state[cellIndex.getRow()][cellIndex.getCol()].setUpdateType(UpdateType.LOCKED);
+            visited.add(cellIndex);
         }
     }
 
@@ -180,12 +209,15 @@ public class GameState {
         return filteredIndexes;
     }
     private boolean isCollided(List<Index> cellsIndex, Index directionOffset) {
-        for (Index index : cellsIndex) {
-            int row = index.getRow() + directionOffset.getRow();
-            int col = index.getCol() + directionOffset.getCol();
-            if (row < 0 || col < 0 || col >= GRID_COLS
-                    || state[row][col].getUpdateType() == UpdateType.LOCKED) return true;
-        }
+        for (Index index : cellsIndex)
+            if (isCellCollided(index, directionOffset)) return true;
         return false;
+    }
+
+    private boolean isCellCollided(Index cellIndex, Index directionOffset){
+        int row = cellIndex.getRow() + directionOffset.getRow();
+        int col = cellIndex.getCol() + directionOffset.getCol();
+        return row < 0 || col < 0 || col >= GRID_COLS
+                || state[row][col].getUpdateType() == UpdateType.LOCKED;
     }
 }

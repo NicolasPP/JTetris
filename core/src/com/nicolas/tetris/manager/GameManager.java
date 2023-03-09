@@ -56,7 +56,6 @@ public class GameManager implements InputProcessor {
                 gameUI.getStats().addStat(bagRandomizer.peekQueue());
                 gameState.spawnTetromino(bagRandomizer.getNext());
                 gameUI.getSpawnQueue().updatePositions();
-
             }
             gameState.shift(ShiftDirection.DOWN, UpdateType.FALLING);
             levelMan.processClearedLines(gameState.processFilledLines());
@@ -75,14 +74,15 @@ public class GameManager implements InputProcessor {
             case Input.Keys.LEFT:
                 gameState.shift(ShiftDirection.LEFT, UpdateType.FALLING);
                 break;
-            case Input.Keys.A:
+            case Input.Keys.DOWN:
                 gameState.rotate(RotationDirection.ANTICLOCKWISE);
                 break;
-            case Input.Keys.S:
+            case Input.Keys.UP:
                 gameState.rotate(RotationDirection.CLOCKWISE);
                 break;
             case Input.Keys.SPACE:
                 gameState.shift(ShiftDirection.DOWN, UpdateType.FALLING);
+                break;
         }
         return false;
     }
