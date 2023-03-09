@@ -1,6 +1,6 @@
 package com.nicolas.tetris.game.cell;
 
-import com.nicolas.tetris.utils.Pos;
+import com.badlogic.gdx.math.Vector2;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import lombok.Data;
 public class Cell {
     private CellType type;
     private UpdateType updateType;
-    private Pos bottomLeft;
+    private Vector2 bottomLeft;
     public boolean isLocked() {return updateType == UpdateType.LOCKED;}
     public boolean isNotEmpty(){return type != CellType.EMPTY;}
     public boolean isNotSpawn(){
