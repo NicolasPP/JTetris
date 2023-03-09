@@ -1,11 +1,12 @@
 package com.nicolas.tetris.game.state;
 
+import com.badlogic.gdx.math.Vector2;
 import com.nicolas.tetris.game.cell.Cell;
 import com.nicolas.tetris.game.cell.CellType;
 import com.nicolas.tetris.game.cell.UpdateType;
 import com.nicolas.tetris.utils.RotationDirection;
 import com.nicolas.tetris.sprites.TetrominoSprite;
-import com.nicolas.tetris.utils.Pos;
+import com.nicolas.tetris.utils.Index;
 import lombok.Data;
 
 import java.util.*;
@@ -21,15 +22,15 @@ public class GameState {
 
     private TetrominoState tetrominoState;
 
-    public GameState(Pos boardPos) {
+    public GameState(Vector2 boardPos) {
         init(boardPos);
     }
 
     public void shift(ShiftDirection direction, UpdateType updateType) {
         if (tetrominoState == null) return;
 
-        Pos directionOffset = direction.getDirectionOffset();
-        List<Pos> cellsIndex = getCellsIndexByUpdateType(updateType);
+        Index directionOffset = direction.getDirectionOffset();
+        List<Index> cellsIndex = getCellsIndexByUpdateType(updateType);
 
         CellType[][] types = new CellType[GRID_ROWS][GRID_COLS];
         for (CellType[] row : types) Arrays.fill(row, CellType.EMPTY);
@@ -45,7 +46,7 @@ public class GameState {
             }
         } else {
             if (updateType == UpdateType.FALLING) {
-                tetrominoState.getPos().increment(directionOffset);
+                tetrominoState.getPosIndex().increment(directionOffset);
             }
             cellsIndex.forEach(index -> {
                 types[index.getRow()][index.getCol()] = state[index.getRow()][index.getCol()].getType();
@@ -78,7 +79,7 @@ public class GameState {
 
         IntStream.range(0, CELL_MAP_SIZE).forEach(row -> IntStream.range(0, CELL_MAP_SIZE).forEach(col -> {
             if (tetrominoState.getCellMap()[row][col] > 0) {
-                Cell nextCell = state[tetrominoState.getPos().getRow() - row][tetrominoState.getPos().getCol() + col];
+                Cell nextCell = state[tetrominoState.getPosIndex().getRow() - row][tetrominoState.getPosIndex().getCol() + col];
                 nextCell.setType(tetrominoState.getType());
                 nextCell.setUpdateType(UpdateType.FALLING);
             }
@@ -143,15 +144,15 @@ public class GameState {
         System.out.println();
     }
 
-    private void init(Pos boardPos) {
+    private void init(Vector2 boardPos) {
         int cellSize = (int) (CELL_SIZE * TEXTURE_SCALE);
         IntStream.range(0, GRID_ROWS).forEach(row -> IntStream.range(0, GRID_COLS).forEach(col -> {
-            Pos pos = new Pos(((row + 1) * cellSize) + boardPos.getRow(), ((col + 1) * cellSize) + boardPos.getCol());
+            Vector2 pos = new Vector2(((col + 1) * cellSize) + (int)boardPos.x, ((row + 1) * cellSize) + (int)boardPos.y);
             state[row][col] = Cell.builder().type(CellType.EMPTY).updateType(UpdateType.SKIP).bottomLeft(pos).build();
             if (row >= GRID_ROWS - SPAWN_ROW_COUNT) {
                 state[row][col].setType(CellType.SPAWN);
                 state[row][col].setUpdateType(UpdateType.SKIP);
-                state[row][col].setBottomLeft(new Pos(-1, -1));
+                state[row][col].setBottomLeft(new Vector2(-1, -1));
             }
         }));
     }
@@ -159,8 +160,8 @@ public class GameState {
     private boolean isRotateSafe() {
         for (int row = 0; row < CELL_MAP_SIZE; row++) {
             for (int col = 0; col < CELL_MAP_SIZE; col++) {
-                int nextRow = tetrominoState.getPos().getRow() - row;
-                int nextCol = tetrominoState.getPos().getCol() + col;
+                int nextRow = tetrominoState.getPosIndex().getRow() - row;
+                int nextCol = tetrominoState.getPosIndex().getCol() + col;
                 if (tetrominoState.getCellMap()[row][col] == 0) continue;
                 if (nextRow >= GRID_ROWS || nextRow < 0 || nextCol >= GRID_COLS || nextCol < 0) return false;
                 if (state[nextRow][nextCol].getUpdateType() == UpdateType.LOCKED) return false;
@@ -169,17 +170,17 @@ public class GameState {
         return true;
     }
 
-    private List<Pos> getCellsIndexByUpdateType(UpdateType updateType) {
-        List<Pos> filteredIndexes = new ArrayList<>();
+    private List<Index> getCellsIndexByUpdateType(UpdateType updateType) {
+        List<Index> filteredIndexes = new ArrayList<>();
         IntStream.range(0, GRID_ROWS).forEach(row -> IntStream.range(0, GRID_COLS).forEach(col -> {
             if (state[row][col].getUpdateType() == updateType) {
-                filteredIndexes.add(new Pos(row, col));
+                filteredIndexes.add(new Index(row, col));
             }
         }));
         return filteredIndexes;
     }
-    private boolean isCollided(List<Pos> cellsIndex, Pos directionOffset) {
-        for (Pos index : cellsIndex) {
+    private boolean isCollided(List<Index> cellsIndex, Index directionOffset) {
+        for (Index index : cellsIndex) {
             int row = index.getRow() + directionOffset.getRow();
             int col = index.getCol() + directionOffset.getCol();
             if (row < 0 || col < 0 || col >= GRID_COLS
