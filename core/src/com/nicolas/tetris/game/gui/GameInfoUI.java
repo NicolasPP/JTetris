@@ -9,9 +9,7 @@ public class GameInfoUI {
     private final ScoreUI score;
     private final SpawnQueueUI spawnQueue;
     private final StatsUI stats;
-
     private final HoldUI hold;
-
     public GameInfoUI(SpriteBagRand bagRandomizer) {
         score = new ScoreUI();
         spawnQueue = new SpawnQueueUI(bagRandomizer);
@@ -24,5 +22,11 @@ public class GameInfoUI {
         spawnQueue.render(batch);
         stats.render(batch);
         hold.render(batch);
+    }
+
+    public void restartGame(){
+        stats.reset();
+        spawnQueue.reset();
+        score.reset();
     }
 }
