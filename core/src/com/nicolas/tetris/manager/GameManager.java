@@ -8,12 +8,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.nicolas.tetris.game.cell.Cell;
 import com.nicolas.tetris.game.cell.UpdateType;
 import com.nicolas.tetris.game.gui.GameInfoUI;
+import com.nicolas.tetris.game.randomizer.SpriteBagRand;
 import com.nicolas.tetris.game.state.GameState;
 import com.nicolas.tetris.game.state.ShiftDirection;
-import com.nicolas.tetris.utils.RotationDirection;
-import com.nicolas.tetris.game.randomizer.SpriteBagRand;
 import com.nicolas.tetris.sprites.BoardSprite;
 import com.nicolas.tetris.sprites.TetrominoSprite;
+import com.nicolas.tetris.utils.RotationDirection;
 
 import java.util.Arrays;
 
@@ -28,7 +28,7 @@ public class GameManager implements InputProcessor {
     private final LevelManager levelMan = new LevelManager();
     private final BoardSprite board = BoardSprite.getInstance();
     private final GameInfoUI gameUI = new GameInfoUI(bagRandomizer);
-    private final Vector2 boardPos = new Vector2(STATS_UI_COLS * (int)(CELL_SIZE * TEXTURE_SCALE), 0);
+    private final Vector2 boardPos = new Vector2(STATS_UI_COLS * (int) (CELL_SIZE * TEXTURE_SCALE), 0);
     private float accumulator = 0f;
 
     public GameManager() {
@@ -53,7 +53,7 @@ public class GameManager implements InputProcessor {
     public void update(float dt) {
         accumulator += dt;
         if (accumulator >= levelMan.getTimePerCell()) {
-            if (gameState.isSpawnUnlocked()){
+            if (gameState.isSpawnUnlocked()) {
                 gameUI.getStatsUI().addStat(bagRandomizer.peekQueue());
                 gameState.spawnTetromino(bagRandomizer.getNext());
                 gameUI.getSpawnQueueUI().updatePositions();
@@ -66,7 +66,7 @@ public class GameManager implements InputProcessor {
             accumulator = 0f;
             gameUI.getLevelUI().updateValues(levelMan.getScore(), levelMan.getLevel(), levelMan.getTotalLinesCleared());
 
-            if (gameState.isGameOver() || levelMan.getTotalLinesCleared() >= MAX_LINES){
+            if (gameState.isGameOver() || levelMan.getTotalLinesCleared() >= MAX_LINES) {
                 gameState.restartGame(boardPos);
                 gameUI.restartGame();
                 bagRandomizer.reset();
@@ -95,7 +95,6 @@ public class GameManager implements InputProcessor {
             case Input.Keys.H:
                 gameState.hold(gameUI.getHoldUI());
                 break;
-
         }
         return false;
     }

@@ -5,15 +5,22 @@ import com.nicolas.tetris.game.cell.Cell;
 import com.nicolas.tetris.game.cell.CellType;
 import com.nicolas.tetris.game.cell.UpdateType;
 import com.nicolas.tetris.game.gui.HoldUI;
-import com.nicolas.tetris.utils.RotationDirection;
 import com.nicolas.tetris.sprites.TetrominoSprite;
 import com.nicolas.tetris.utils.Index;
+import com.nicolas.tetris.utils.RotationDirection;
 import lombok.Data;
 
 import java.util.*;
 import java.util.stream.IntStream;
 
-import static com.nicolas.tetris.config.TetrisConfig.*;
+import static com.nicolas.tetris.config.TetrisConfig.GRID_ROWS;
+import static com.nicolas.tetris.config.TetrisConfig.GRID_COLS;
+import static com.nicolas.tetris.config.TetrisConfig.SPAWN_ROW_COUNT;
+import static com.nicolas.tetris.config.TetrisConfig.SPAWN_ROW;
+import static com.nicolas.tetris.config.TetrisConfig.CELL_MAP_SIZE;
+import static com.nicolas.tetris.config.TetrisConfig.SPAWN_COl;
+import static com.nicolas.tetris.config.TetrisConfig.CELL_SIZE;
+import static com.nicolas.tetris.config.TetrisConfig.TEXTURE_SCALE;
 
 
 @Data
@@ -41,12 +48,12 @@ public class GameState {
 
         if (isCollided(cellsIndex, directionOffset)) {
             if (direction == ShiftDirection.DOWN) {
-                if(updateType == UpdateType.FALLING){
+                if (updateType == UpdateType.FALLING) {
                     cellsIndex.forEach(index -> state[index.getRow()][index.getCol()].setUpdateType(UpdateType.LOCKED));
                     spawnUnlocked = true;
                     canHold = true;
                 }
-                if(updateType == UpdateType.LOCK_FALL) setNeighboursUpdateType(cellsIndex, directionOffset);
+                if (updateType == UpdateType.LOCK_FALL) setNeighboursUpdateType(cellsIndex, directionOffset);
             }
         } else {
             if (updateType == UpdateType.FALLING) {
@@ -56,9 +63,11 @@ public class GameState {
                 types[index.getRow()][index.getCol()] = state[index.getRow()][index.getCol()].getType();
                 Cell cell = state[index.getRow()][index.getCol()];
                 if (index.getRow() >= GRID_ROWS - SPAWN_ROW_COUNT) {
-                    cell.setType(CellType.SPAWN); cell.setUpdateType(UpdateType.SKIP);
+                    cell.setType(CellType.SPAWN);
+                    cell.setUpdateType(UpdateType.SKIP);
                 } else {
-                    cell.setType(CellType.EMPTY); cell.setUpdateType(UpdateType.SKIP);
+                    cell.setType(CellType.EMPTY);
+                    cell.setUpdateType(UpdateType.SKIP);
                 }
             });
 
@@ -71,7 +80,7 @@ public class GameState {
         }
     }
 
-    private void setNeighboursUpdateType(List<Index> cellsIndex, Index directionOffset){
+    private void setNeighboursUpdateType(List<Index> cellsIndex, Index directionOffset) {
         LinkedList<Index> q = new LinkedList<>();
         Set<Index> visited = new HashSet<>();
 
@@ -99,11 +108,11 @@ public class GameState {
         }
     }
 
-    public void hold(HoldUI holdUI){
+    public void hold(HoldUI holdUI) {
         if (!canHold) return;
         canHold = false;
-        Arrays.stream(state).forEach(row -> Arrays.stream(row).forEach(cell ->{
-            if (cell.getUpdateType() == UpdateType.FALLING){
+        Arrays.stream(state).forEach(row -> Arrays.stream(row).forEach(cell -> {
+            if (cell.getUpdateType() == UpdateType.FALLING) {
                 cell.setType(CellType.EMPTY);
                 cell.setUpdateType(UpdateType.SKIP);
             }
@@ -112,7 +121,7 @@ public class GameState {
         CellType prevType = tetrominoState.getType();
         if (holdTetromino != null)
             spawnTetromino(TetrominoSprite.get(holdTetromino));
-        else{
+        else {
             spawnUnlocked = true;
         }
 
@@ -120,14 +129,14 @@ public class GameState {
         holdUI.setHoldTetromino(holdTetromino);
     }
 
-    public boolean isGameOver(){
-        for(Cell cell : state[SPAWN_ROW - SPAWN_ROW_COUNT]){
+    public boolean isGameOver() {
+        for (Cell cell : state[SPAWN_ROW - SPAWN_ROW_COUNT]) {
             if (cell.getUpdateType() == UpdateType.LOCKED) return true;
         }
         return false;
     }
 
-    public void restartGame(Vector2 boardPos){
+    public void restartGame(Vector2 boardPos) {
         init(boardPos);
     }
 
@@ -187,7 +196,7 @@ public class GameState {
             if (row >= GRID_ROWS - SPAWN_ROW_COUNT || row < minRow) continue;
             for (int col = 0; col < state[row].length; col++) {
                 Cell cell = state[row][col];
-                if(cell.getUpdateType() == UpdateType.LOCKED) cell.setUpdateType(UpdateType.LOCK_FALL);
+                if (cell.getUpdateType() == UpdateType.LOCKED) cell.setUpdateType(UpdateType.LOCK_FALL);
             }
         }
 
@@ -211,7 +220,7 @@ public class GameState {
     private void init(Vector2 boardPos) {
         int cellSize = (int) (CELL_SIZE * TEXTURE_SCALE);
         IntStream.range(0, GRID_ROWS).forEach(row -> IntStream.range(0, GRID_COLS).forEach(col -> {
-            Vector2 pos = new Vector2(((col + 1) * cellSize) + (int)boardPos.x, ((row + 1) * cellSize) + (int)boardPos.y);
+            Vector2 pos = new Vector2(((col + 1) * cellSize) + (int) boardPos.x, ((row + 1) * cellSize) + (int) boardPos.y);
             state[row][col] = Cell.builder().type(CellType.EMPTY).updateType(UpdateType.SKIP).bottomLeft(pos).build();
             if (row >= GRID_ROWS - SPAWN_ROW_COUNT) {
                 state[row][col].setType(CellType.SPAWN);
@@ -243,13 +252,14 @@ public class GameState {
         }));
         return filteredIndexes;
     }
+
     private boolean isCollided(List<Index> cellsIndex, Index directionOffset) {
         for (Index index : cellsIndex)
             if (isCellCollided(index, directionOffset)) return true;
         return false;
     }
 
-    private boolean isCellCollided(Index cellIndex, Index directionOffset){
+    private boolean isCellCollided(Index cellIndex, Index directionOffset) {
         int row = cellIndex.getRow() + directionOffset.getRow();
         int col = cellIndex.getCol() + directionOffset.getCol();
         return row < 0 || col < 0 || col >= GRID_COLS
