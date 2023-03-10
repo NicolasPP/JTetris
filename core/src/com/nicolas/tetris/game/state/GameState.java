@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.nicolas.tetris.game.cell.Cell;
 import com.nicolas.tetris.game.cell.CellType;
 import com.nicolas.tetris.game.cell.UpdateType;
+import com.nicolas.tetris.game.gui.HoldUI;
 import com.nicolas.tetris.utils.RotationDirection;
 import com.nicolas.tetris.sprites.TetrominoSprite;
 import com.nicolas.tetris.utils.Index;
@@ -20,7 +21,10 @@ public class GameState {
     private final Cell[][] state = new Cell[GRID_ROWS][GRID_COLS];
     private boolean spawnUnlocked = true;
 
+    private boolean canHold = true;
     private TetrominoState tetrominoState;
+    private CellType holdTetromino = null;
+
 
     public GameState(Vector2 boardPos) {
         init(boardPos);
@@ -35,13 +39,12 @@ public class GameState {
         CellType[][] types = new CellType[GRID_ROWS][GRID_COLS];
         for (CellType[] row : types) Arrays.fill(row, CellType.EMPTY);
 
-
-        boolean isCollided = isCollided(cellsIndex, directionOffset);
-        if (isCollided) {
+        if (isCollided(cellsIndex, directionOffset)) {
             if (direction == ShiftDirection.DOWN) {
                 if(updateType == UpdateType.FALLING){
                     cellsIndex.forEach(index -> state[index.getRow()][index.getCol()].setUpdateType(UpdateType.LOCKED));
                     spawnUnlocked = true;
+                    canHold = true;
                 }
                 if(updateType == UpdateType.LOCK_FALL) setNeighboursUpdateType(cellsIndex, directionOffset);
             }
@@ -94,6 +97,27 @@ public class GameState {
             state[cellIndex.getRow()][cellIndex.getCol()].setUpdateType(UpdateType.LOCKED);
             visited.add(cellIndex);
         }
+    }
+
+    public void hold(HoldUI holdUI){
+        if (!canHold) return;
+        canHold = false;
+        Arrays.stream(state).forEach(row -> Arrays.stream(row).forEach(cell ->{
+            if (cell.getUpdateType() == UpdateType.FALLING){
+                cell.setType(CellType.EMPTY);
+                cell.setUpdateType(UpdateType.SKIP);
+            }
+        }));
+
+        CellType prevType = tetrominoState.getType();
+        if (holdTetromino != null)
+            spawnTetromino(TetrominoSprite.get(holdTetromino));
+        else{
+            spawnUnlocked = true;
+        }
+
+        holdTetromino = prevType;
+        holdUI.setHoldTetromino(holdTetromino);
     }
 
     public boolean isGameOver(){
