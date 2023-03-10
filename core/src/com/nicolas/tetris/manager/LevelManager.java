@@ -16,7 +16,7 @@ public class LevelManager {
         score += calculateScore(linesCleared);
     }
 
-    public float getTimePerCell() {
+    public float getTimePerCell(int level) {
         return (float) Math.pow(0.8f - ((level - 1) * 0.007f), level - 1);
     }
     private int calculateScore(int linesCleared){
