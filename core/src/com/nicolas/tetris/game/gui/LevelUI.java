@@ -1,5 +1,6 @@
 package com.nicolas.tetris.game.gui;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -7,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.nicolas.tetris.manager.ResourceManager;
 
-import static com.nicolas.tetris.config.TetrisConfig.SCORE_PADDING;
+import static com.nicolas.tetris.config.TetrisConfig.LEVEL_PADDING;
 import static com.nicolas.tetris.config.TetrisConfig.STATS_UI_COLS;
 import static com.nicolas.tetris.config.TetrisConfig.BOARD_COLS;
 import static com.nicolas.tetris.config.TetrisConfig.CELL_SIZE;
@@ -45,6 +46,7 @@ public class LevelUI extends UIComponent {
         parameter.size = SCORE_FONT_SIZE;
         labelFont = ResourceManager.getFont(ResourceManager.Fonts.PIXEL, parameter);
         parameter.size = SCORE_VALUE_FONT_SIZE;
+        parameter.color = new Color(Color.GOLD);
         valueFont = ResourceManager.getFont(ResourceManager.Fonts.PIXEL, parameter);
 
         GlyphLayout labelLayout, valueLayout;
@@ -53,20 +55,20 @@ public class LevelUI extends UIComponent {
         valueLabel = getSixDigitNumber(scoreValue);
         labelLayout = new GlyphLayout(labelFont, SCORE_LABEL);
         valueLayout = new GlyphLayout(valueFont, valueLabel);
-        scoreLabelPos = new Vector2(getX(labelLayout), getBottomLeft().y + getSize().y - SCORE_PADDING);
-        scoreValuePos = new Vector2(getX(valueLayout), scoreLabelPos.y - labelLayout.height - SCORE_PADDING);
+        scoreLabelPos = new Vector2(getX(labelLayout), getBottomLeft().y + getSize().y - LEVEL_PADDING);
+        scoreValuePos = new Vector2(getX(valueLayout), scoreLabelPos.y - labelLayout.height - LEVEL_PADDING);
 
         valueLabel = getSixDigitNumber(levelValue);
         labelLayout = new GlyphLayout(labelFont, LEVEL_LABEL);
         valueLayout = new GlyphLayout(valueFont, valueLabel);
-        levelLabelPos = new Vector2(getX(labelLayout), scoreValuePos.y - valueLayout.height - SCORE_PADDING);
-        levelValuePos = new Vector2(getX(valueLayout), levelLabelPos.y - labelLayout.height - SCORE_PADDING);
+        levelLabelPos = new Vector2(getX(labelLayout), scoreValuePos.y - valueLayout.height - LEVEL_PADDING);
+        levelValuePos = new Vector2(getX(valueLayout), levelLabelPos.y - labelLayout.height - LEVEL_PADDING);
 
         valueLabel = getSixDigitNumber(linesValue);
         labelLayout = new GlyphLayout(labelFont, LINES_LABEL);
         valueLayout = new GlyphLayout(valueFont, valueLabel);
-        linesLabelPos = new Vector2(getX(labelLayout), levelValuePos.y - valueLayout.height - SCORE_PADDING);
-        linesValuePos = new Vector2(getX(valueLayout), linesLabelPos.y - labelLayout.height - SCORE_PADDING);
+        linesLabelPos = new Vector2(getX(labelLayout), levelValuePos.y - valueLayout.height - LEVEL_PADDING);
+        linesValuePos = new Vector2(getX(valueLayout), linesLabelPos.y - labelLayout.height - LEVEL_PADDING);
     }
 
     private String getSixDigitNumber(Integer num){
