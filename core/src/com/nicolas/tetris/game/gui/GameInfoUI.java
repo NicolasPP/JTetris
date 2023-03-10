@@ -28,5 +28,6 @@ public class GameInfoUI {
         statsUI.reset();
         spawnQueueUI.reset();
         levelUI.reset();
+        holdUI.reset();
     }
 }

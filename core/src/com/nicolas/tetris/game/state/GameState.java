@@ -138,6 +138,7 @@ public class GameState {
 
     public void restartGame(Vector2 boardPos) {
         init(boardPos);
+        holdTetromino = null;
     }
 
     public void rotate(RotationDirection direction) {

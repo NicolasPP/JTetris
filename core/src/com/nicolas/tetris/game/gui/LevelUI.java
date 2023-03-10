@@ -111,5 +111,8 @@ public class LevelUI extends UIComponent {
 
     public void reset(){
         init();
+        scoreValue = 0;
+        linesValue = 0;
+        levelValue = 0;
     }
 }

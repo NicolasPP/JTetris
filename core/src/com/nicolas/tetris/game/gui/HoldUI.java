@@ -38,4 +38,8 @@ public class HoldUI extends UIComponent {
 
         holdPos = new Vector2(x, y);
     }
+
+    public void reset(){
+        holdTetromino = null;
+    }
 }
