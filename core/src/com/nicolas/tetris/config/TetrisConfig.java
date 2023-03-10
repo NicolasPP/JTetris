@@ -60,6 +60,7 @@ public class TetrisConfig {
     public final static int LEVEL_PADDING = 14;
     public final static int SCORE_VALUE_FONT_SIZE = 15;
     public final static int MAX_LINES = 150;
+    public final static int GO_FAST_LEVEL = 12;
     public final static String SPRITE_TXT_FILE = "sprites.txt";
     public final static String PIXEL_FONT_TTF = "thirteen_pixel_fonts.ttf";
     public final static String TETRIS_FONT_TTF = "Tetris.ttf";
