@@ -92,6 +92,10 @@ public class GameManager implements InputProcessor {
             case Input.Keys.SPACE:
                 gameState.shift(ShiftDirection.DOWN, UpdateType.FALLING);
                 break;
+            case Input.Keys.H:
+                gameState.hold(gameUI.getHoldUI());
+                break;
+
         }
         return false;
     }
