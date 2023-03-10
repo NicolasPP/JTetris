@@ -21,6 +21,7 @@ import static com.nicolas.tetris.config.TetrisConfig.STATS_UI_COLS;
 import static com.nicolas.tetris.config.TetrisConfig.CELL_SIZE;
 import static com.nicolas.tetris.config.TetrisConfig.TEXTURE_SCALE;
 import static com.nicolas.tetris.config.TetrisConfig.MAX_LINES;
+import static com.nicolas.tetris.config.TetrisConfig.GO_FAST_LEVEL;
 
 public class GameManager implements InputProcessor {
     private final GameState gameState;
@@ -30,6 +31,8 @@ public class GameManager implements InputProcessor {
     private final GameInfoUI gameUI = new GameInfoUI(bagRandomizer);
     private final Vector2 boardPos = new Vector2(STATS_UI_COLS * (int) (CELL_SIZE * TEXTURE_SCALE), 0);
     private float accumulator = 0f;
+
+    private boolean goFast = false;
 
     public GameManager() {
         gameState = new GameState(boardPos);
@@ -52,7 +55,15 @@ public class GameManager implements InputProcessor {
 
     public void update(float dt) {
         accumulator += dt;
-        if (accumulator >= levelMan.getTimePerCell()) {
+
+        float timePerCell;
+        if (goFast){
+            timePerCell = levelMan.getTimePerCell(GO_FAST_LEVEL);
+        }else{
+            timePerCell = levelMan.getTimePerCell(levelMan.getLevel());
+        }
+
+        if (accumulator >= timePerCell) {
             if (gameState.isSpawnUnlocked()) {
                 gameUI.getStatsUI().addStat(bagRandomizer.peekQueue());
                 gameState.spawnTetromino(bagRandomizer.getNext());
@@ -90,7 +101,7 @@ public class GameManager implements InputProcessor {
                 gameState.rotate(RotationDirection.CLOCKWISE);
                 break;
             case Input.Keys.SPACE:
-                gameState.shift(ShiftDirection.DOWN, UpdateType.FALLING);
+                goFast = true;
                 break;
             case Input.Keys.H:
                 gameState.hold(gameUI.getHoldUI());
@@ -101,6 +112,9 @@ public class GameManager implements InputProcessor {
 
     @Override
     public boolean keyUp(int i) {
+        if (i == Input.Keys.SPACE) {
+            goFast = false;
+        }
         return false;
     }
 
